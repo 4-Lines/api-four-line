@@ -1,3 +1,6 @@
+using IES300.API.Domain.Interfaces.Repositories;
+using IES300.API.Repository;
+using IES300.API.Repository.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +37,16 @@ namespace IES300.API.Application
             });
 
             services.AddSignalR();
+
+            services.AddDbContext<ApiDbContext>();
+
+            services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
+
+            // services.AddScoped(typeof(interfaceRepository), typeof(classRepository));
+
+            // services.AddTransient(typeof(interfaceService), typeof(classService));
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +64,12 @@ namespace IES300.API.Application
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             //app.MapHub<MyHub>("/chat");
 
