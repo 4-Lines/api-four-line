@@ -22,27 +22,39 @@ namespace IES300.API.Repository.Repositories
 
         public T ObterPorId(int id, bool asNoTracking = true)
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = _dbSet;
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return query.FirstOrDefault(x => x.Id == id);
         }
 
         public IList<T> ObterTodos()
         {
-            throw new NotImplementedException();
+            return _dbSet.ToList();
         }
 
         public void Inserir(T entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Add(entity);
+            _context.SaveChanges();
         }
 
         public void Alterar(T entity)
         {
-            throw new NotImplementedException();
+            _dbSet.Update(entity);
+            _context.SaveChanges();
         }
 
-        public void Deletar(T entity)
+        public void Deletar(int id)
         {
-            throw new NotImplementedException();
+            var entity = ObterPorId(id);
+
+            if(entity != null)
+            {
+                _dbSet.Remove(entity);
+                _context.SaveChanges();
+            }
         }
     }
 }
