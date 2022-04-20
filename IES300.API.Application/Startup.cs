@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,7 +39,9 @@ namespace IES300.API.Application
 
             services.AddSignalR();
 
-            services.AddDbContext<ApiDbContext>();
+            services.AddDbContext<ApiDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+            );
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 

@@ -1,9 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using IES300.API.Domain.Entities;
+using IES300.API.Repository.Mapping;
+using Microsoft.EntityFrameworkCore;
 
 namespace IES300.API.Repository
 {
@@ -13,16 +10,20 @@ namespace IES300.API.Repository
 
         public ApiDbContext(DbContextOptions<ApiDbContext> options) : base(options) { }
 
-        // dbSets
+        public DbSet<Patrocinador> Patrocinador { get; set; }
+        public DbSet<Tema> Tema { get; set; }
+        public DbSet<Ficha> Ficha { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=serverDatabase;Database=nameDatabase;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=Fabiano;Database=quatroemlinha;Trusted_Connection=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // chamar os mappings
+            modelBuilder.Entity<Patrocinador>(new PatrocinadorMap().Configure);
+            modelBuilder.Entity<Tema>(new TemaMap().Configure);
+            modelBuilder.Entity<Ficha>(new FichaMap().Configure);
 
             base.OnModelCreating(modelBuilder);
         }
