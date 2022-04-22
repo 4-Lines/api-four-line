@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IES300.API.Repository.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20220420005744_Subindo entidades")]
-    partial class Subindoentidades
+    [Migration("20220422000915_subindoBancoDeDados")]
+    partial class subindoBancoDeDados
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

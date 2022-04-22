@@ -1,6 +1,8 @@
 using IES300.API.Domain.Interfaces.Repositories;
+using IES300.API.Domain.Interfaces.Services;
 using IES300.API.Repository;
 using IES300.API.Repository.Repositories;
+using IES300.API.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -45,9 +47,9 @@ namespace IES300.API.Application
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
 
-            // services.AddScoped(typeof(interfaceRepository), typeof(classRepository));
+            services.AddScoped(typeof(IPatrocinadorRepository), typeof(PatrocinadorRepository));
 
-            // services.AddTransient(typeof(interfaceService), typeof(classService));
+            services.AddTransient(typeof(IPatrocinadorService), typeof(PatrocinadorService));
 
             services.AddCors();
         }
