@@ -14,6 +14,7 @@ namespace IES300.API.Application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class PatrocinadorController : ControllerBase
     {
         private readonly IPatrocinadorService _patrocinadorService;
@@ -24,7 +25,6 @@ namespace IES300.API.Application.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public IActionResult InserirPatrocinador([FromBody] PatrocinadorInputDTO patrocinadorInput)
         {
             try
@@ -45,7 +45,6 @@ namespace IES300.API.Application.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult ObterTodosPatrocinadores()
         {
             try
