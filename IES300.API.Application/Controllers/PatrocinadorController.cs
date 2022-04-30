@@ -43,5 +43,36 @@ namespace IES300.API.Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ObterTodosPatrocinadores()
+        {
+            try
+            {
+                var listaPatrocinadoresOutput = _patrocinadorService.ObterTodosPatrocinadores();
+               
+                return Ok(listaPatrocinadoresOutput);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public IActionResult ObterPatrocinadorPorId(int id)
+        {
+            try
+            {
+                var patrocinadoresOutput = _patrocinadorService.ObterPatrocinadorPorId(id);
+
+                return Ok(patrocinadoresOutput);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }

@@ -44,5 +44,40 @@ namespace IES300.API.Services.Services
                 Ativado = patrocinador.Ativado
             };
         }
+
+        public List<PatrocinadorOutputDTO> ObterTodosPatrocinadores()
+        {
+            var listaPatrocinadores = _patrocinadorRepository.ObterTodos();
+
+            return listaPatrocinadores.Select(x =>
+            {
+                return new PatrocinadorOutputDTO()
+                {
+                    Id = x.Id,
+                    Nome = x.Nome,
+                    Email = x.Email,
+                    UrlLogo = x.UrlLogo,
+                    Website = x.Website,
+                    Celular = x.Celular,
+                    Ativado = x.Ativado
+                };
+            }).ToList();
+        }
+
+        public PatrocinadorOutputDTO ObterPatrocinadorPorId(int id)
+        {
+            var patrocinador = _patrocinadorRepository.ObterPorId(id);
+
+            return new PatrocinadorOutputDTO()
+            {
+                Id = patrocinador.Id,
+                Nome = patrocinador.Nome,
+                Email = patrocinador.Email,
+                UrlLogo = patrocinador.UrlLogo,
+                Website = patrocinador.Website,
+                Celular = patrocinador.Celular,
+                Ativado = patrocinador.Ativado
+            };
+        }
     }
 }

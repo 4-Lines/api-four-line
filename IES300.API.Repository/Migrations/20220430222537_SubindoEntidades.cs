@@ -2,7 +2,7 @@
 
 namespace IES300.API.Repository.Migrations
 {
-    public partial class subindoBancoDeDados : Migration
+    public partial class SubindoEntidades : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
