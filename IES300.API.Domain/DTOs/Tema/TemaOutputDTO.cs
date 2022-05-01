@@ -10,6 +10,6 @@
 
         public int IdPatrocinador { get; set; }
 
-        public int Ativado { get; set; }       
+        public bool Ativado { get; set; }       
     }
 }

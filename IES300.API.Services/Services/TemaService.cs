@@ -19,12 +19,32 @@ namespace IES300.API.Services.Services
         }
         public TemaOutputDTO AlterarTema(TemaInputDTO temaInput)
         {
-            throw new NotImplementedException(); //Função aqui
+            if (_temaRepository.ObterPorId(temaInput.Id) != null)
+                return null;
+
+            var oTema = new Tema()
+            {
+                Ativado = temaInput.Ativado,
+                Id = temaInput.Id,
+                Nome = temaInput.Nome,
+                IdPatrocinador = temaInput.IdPatrocinador,
+                UrlTabuleiro = temaInput.UrlTabuleiro
+            };
+            _temaRepository.Alterar(oTema);
+
+            return new TemaOutputDTO()
+            {
+                Ativado = temaInput.Ativado,
+                Id = temaInput.Id,
+                IdPatrocinador = temaInput.IdPatrocinador,
+                Nome = temaInput.Nome,
+                UrlTabuleiro = temaInput.UrlTabuleiro
+            };
         }
 
-        public void DeletarTema(TemaInputDTO TemaInput)
+        public void DeletarTema(int id)
         {
-            throw new NotImplementedException(); //Função aqui
+            _temaRepository.Deletar(id);
         }
 
         public TemaOutputDTO InserirTema(TemaInputDTO TemaInput)
@@ -54,7 +74,19 @@ namespace IES300.API.Services.Services
 
         public List<TemaOutputDTO> ObterTodosTemas()
         {
-            throw new NotImplementedException(); //Função aqui
+            var listaTemas = _temaRepository.ObterTodos();
+
+            return listaTemas.Select(x =>
+            {
+                return new TemaOutputDTO()
+                {
+                    Id = x.Id,
+                    Nome = x.Nome,
+                    Ativado = x.Ativado,
+                    IdPatrocinador = x.IdPatrocinador,
+                    UrlTabuleiro = x.UrlTabuleiro
+                };
+            }).ToList();
         }
     }
 }
