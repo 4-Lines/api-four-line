@@ -73,5 +73,25 @@ namespace IES300.API.Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpPut]
+        public IActionResult AlterarPatrocinador([FromBody] PatrocinadorInputDTO patrocinadorInput)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                var patrocinadorOutput = _patrocinadorService.InserirPatrocinador(patrocinadorInput);
+                if (patrocinadorOutput == null)
+                    return BadRequest();
+
+                return Ok(patrocinadorOutput);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
     }
 }
