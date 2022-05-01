@@ -5,9 +5,10 @@ namespace IES300.API.Domain.Interfaces.Services
 {
     public interface IPatrocinadorService
     {
-        PatrocinadorOutputDTO InserirPatrocinador(PatrocinadorInputDTO patrocinadorInput);
         List<PatrocinadorOutputDTO> ObterTodosPatrocinadores();
         PatrocinadorOutputDTO ObterPatrocinadorPorId(int id);
+        PatrocinadorOutputDTO InserirPatrocinador(PatrocinadorInputDTO patrocinadorInput);
         PatrocinadorOutputDTO AlterarPatrocinador(PatrocinadorOutputDTO patrocinadorOutput);
+        PatrocinadorInputDTO DeletarPatrocinador(int id);
     }
 }

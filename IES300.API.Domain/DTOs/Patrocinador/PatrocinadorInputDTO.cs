@@ -4,7 +4,7 @@ namespace IES300.API.Domain.DTOs.Patrocinador
 {
     public class PatrocinadorInputDTO
     {
-        [Required]
+        [Required(ErrorMessage = "Campo nome obruigatório")]
         public string Nome { get; set; }
 
         [Required]

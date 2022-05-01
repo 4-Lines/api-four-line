@@ -65,6 +65,9 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
+                if (id < 1)
+                    return BadRequest();
+
                 var patrocinadoresOutput = _patrocinadorService.ObterPatrocinadorPorId(id);
 
                 return Ok(patrocinadoresOutput);
@@ -88,6 +91,24 @@ namespace IES300.API.Application.Controllers
                     return BadRequest();
 
                 return Ok(patrocinadorOutputRetorno);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public IActionResult DeletarPatrocinador(int id)
+        {
+            try
+            {
+                if (id < 1)
+                    return BadRequest();
+
+                var retortno = _patrocinadorService.DeletarPatrocinador(id);
+
+                return Ok();
             }
             catch (Exception ex)
             {

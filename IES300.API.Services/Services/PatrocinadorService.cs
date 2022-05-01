@@ -47,7 +47,7 @@ namespace IES300.API.Services.Services
 
         public List<PatrocinadorOutputDTO> ObterTodosPatrocinadores()
         {
-            var listaPatrocinadores = _patrocinadorRepository.ObterTodos();
+            var listaPatrocinadores = _patrocinadorRepository.ObterTodos().Where(x => x.Ativado);
 
             return listaPatrocinadores.Select(x =>
             {
@@ -105,6 +105,13 @@ namespace IES300.API.Services.Services
                 Celular = patrocinador.Celular,
                 Ativado = patrocinador.Ativado
             };
+        }
+
+        public PatrocinadorInputDTO DeletarPatrocinador(int id)
+        {
+            _patrocinadorRepository.Deletar(id);
+
+            return null;
         }
     }
 }
