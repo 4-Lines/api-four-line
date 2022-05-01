@@ -79,5 +79,32 @@ namespace IES300.API.Services.Services
                 Ativado = patrocinador.Ativado
             };
         }
+
+        public PatrocinadorOutputDTO AlterarPatrocinador(PatrocinadorOutputDTO patrocinadorOutput)
+        {
+            var patrocinador = _patrocinadorRepository.ObterPorId(patrocinadorOutput.Id);
+
+            if (patrocinador == null)
+                return null;
+
+            patrocinador.Nome = patrocinadorOutput.Nome;
+            patrocinador.Email = patrocinadorOutput.Email;
+            patrocinador.Celular = patrocinadorOutput.Celular;
+            patrocinador.UrlLogo = patrocinadorOutput.UrlLogo;
+            patrocinador.Website = patrocinadorOutput.Website;
+
+            _patrocinadorRepository.Alterar(patrocinador);
+
+            return new PatrocinadorOutputDTO()
+            {
+                Id = patrocinador.Id,
+                Nome = patrocinador.Nome,
+                Email = patrocinador.Email,
+                UrlLogo = patrocinador.UrlLogo,
+                Website = patrocinador.Website,
+                Celular = patrocinador.Celular,
+                Ativado = patrocinador.Ativado
+            };
+        }
     }
 }

@@ -23,8 +23,6 @@ namespace IES300.API.Domain.Entities
 
         public int IdTema { get; set; }
 
-        public bool Ativado { get; set; }
-
 
         public virtual Tema Tema { get; set; }
     }

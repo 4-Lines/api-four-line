@@ -8,5 +8,6 @@ namespace IES300.API.Domain.Interfaces.Services
         PatrocinadorOutputDTO InserirPatrocinador(PatrocinadorInputDTO patrocinadorInput);
         List<PatrocinadorOutputDTO> ObterTodosPatrocinadores();
         PatrocinadorOutputDTO ObterPatrocinadorPorId(int id);
+        PatrocinadorOutputDTO AlterarPatrocinador(PatrocinadorOutputDTO patrocinadorOutput);
     }
 }

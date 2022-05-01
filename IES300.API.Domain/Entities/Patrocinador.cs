@@ -29,8 +29,6 @@ namespace IES300.API.Domain.Entities
 
         public string UrlLogo { get; set; }
 
-        public bool Ativado { get; set; }
-
 
 
         public virtual ICollection<Tema> Temas { get; set; }

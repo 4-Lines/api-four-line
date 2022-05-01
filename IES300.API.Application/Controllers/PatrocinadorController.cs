@@ -36,7 +36,8 @@ namespace IES300.API.Application.Controllers
                 if (patrocinadorOutput == null)
                     return BadRequest();
 
-                return Ok(patrocinadorOutput);
+                Response.StatusCode = 201;
+                return new ObjectResult(patrocinadorOutput);
             }
             catch(Exception ex)
             {
@@ -44,7 +45,7 @@ namespace IES300.API.Application.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet]       
         public IActionResult ObterTodosPatrocinadores()
         {
             try
@@ -75,18 +76,18 @@ namespace IES300.API.Application.Controllers
         }
 
         [HttpPut]
-        public IActionResult AlterarPatrocinador([FromBody] PatrocinadorInputDTO patrocinadorInput)
+        public IActionResult AlterarPatrocinador([FromBody] PatrocinadorOutputDTO patrocinadorOutput)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest();
 
-                var patrocinadorOutput = _patrocinadorService.InserirPatrocinador(patrocinadorInput);
-                if (patrocinadorOutput == null)
+                var patrocinadorOutputRetorno = _patrocinadorService.AlterarPatrocinador(patrocinadorOutput);
+                if (patrocinadorOutputRetorno == null)
                     return BadRequest();
 
-                return Ok(patrocinadorOutput);
+                return Ok(patrocinadorOutputRetorno);
             }
             catch (Exception ex)
             {

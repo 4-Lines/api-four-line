@@ -16,5 +16,7 @@ namespace IES300.API.Domain.Entities
         }
 
         public int Id { get; set; }
+
+        public bool Ativado { get; set; }
     }
 }

@@ -23,8 +23,6 @@ namespace IES300.API.Domain.Entities
 
         public int IdPatrocinador { get; set; }
 
-        public bool Ativado { get; set; }
-
 
         public virtual Patrocinador Patrocinador { get; set; }
 
