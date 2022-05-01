@@ -2,7 +2,7 @@
 
 namespace IES300.API.Domain.Interfaces.Repositories
 {
-    public interface IPatrocinadorRepository : IRepositoryBase<Patrocinador>
+    public interface ITemaRepository : IRepositoryBase<Tema>
     {
     }
 }
