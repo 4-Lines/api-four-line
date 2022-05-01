@@ -8,7 +8,7 @@ namespace IES300.API.Domain.Interfaces.Services
         TemaOutputDTO InserirTema(TemaInputDTO TemaInput);
         List<TemaOutputDTO> ObterTodosTemas();
         TemaOutputDTO ObterTemaPorId(int id);
-        void DeletarTema(TemaInputDTO TemaInput);
+        void DeletarTema(int id);
         TemaOutputDTO AlterarTema(TemaInputDTO temaInput);
 
     }
