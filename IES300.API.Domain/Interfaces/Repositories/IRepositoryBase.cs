@@ -13,6 +13,6 @@ namespace IES300.API.Domain.Interfaces.Repositories
         IList<T> ObterTodos();
         void Inserir(T entity);
         void Alterar(T entity);
-        void Deletar(int id);
+        bool Deletar(int id);
     }
 }

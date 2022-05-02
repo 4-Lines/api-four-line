@@ -1,14 +1,10 @@
 ﻿using IES300.API.Domain.DTOs.Patrocinador;
-using IES300.API.Domain.Entities;
 using IES300.API.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace IES300.API.Application.Controllers
 {
@@ -33,15 +29,16 @@ namespace IES300.API.Application.Controllers
                     return BadRequest();
 
                 var patrocinadorOutput = _patrocinadorService.InserirPatrocinador(patrocinadorInput);
-                if (patrocinadorOutput == null)
-                    return BadRequest();
 
-                Response.StatusCode = 201;
-                return new ObjectResult(patrocinadorOutput);
+                return StatusCode((int)HttpStatusCode.Created, patrocinadorOutput);
+            }
+            catch(NullReferenceException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch(Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
 
@@ -56,7 +53,7 @@ namespace IES300.API.Application.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
 
@@ -65,16 +62,21 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                if (id < 1)
-                    return BadRequest();
-
                 var patrocinadoresOutput = _patrocinadorService.ObterPatrocinadorPorId(id);
 
                 return Ok(patrocinadoresOutput);
             }
+            catch(KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message } );
             }
         }
 
@@ -94,7 +96,7 @@ namespace IES300.API.Application.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
 
@@ -103,16 +105,21 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                if (id < 1)
-                    return BadRequest();
+                _patrocinadorService.DeletarPatrocinador(id);
 
-                var retortno = _patrocinadorService.DeletarPatrocinador(id);
-
-                return Ok();
+                return Ok(new { message = $"Patrocinador de Id: {id} foi deletado com sucesso" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
     }

@@ -46,16 +46,20 @@ namespace IES300.API.Repository.Repositories
             _context.SaveChanges();
         }
 
-        public void Deletar(int id) // implementar um retorno para confirmar deleção
+        public bool Deletar(int id)
         {
             var entity = ObterPorId(id);
 
-            if(entity != null)
+            if(entity != null && entity.Ativado)
             {
                 entity.Ativado = false;
                 _dbSet.Update(entity);
                 _context.SaveChanges();
+
+                return true;
             }
+
+            return false;
         }
     }
 }

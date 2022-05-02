@@ -4,20 +4,20 @@ namespace IES300.API.Domain.DTOs.Patrocinador
 {
     public class PatrocinadorInputDTO
     {
-        [Required(ErrorMessage = "Campo nome obruigatório")]
+        [Required(ErrorMessage = "Campo nome obrigatório")]
         public string Nome { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Campo website obrigatório")]
         public string Website { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Campo email obrigatório")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Campo celular obrigatório")]
         public string Celular { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Campo urlLogo obrigatório")]
         public string UrlLogo { get; set; }
     }
 }

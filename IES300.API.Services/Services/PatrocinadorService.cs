@@ -5,8 +5,6 @@ using IES300.API.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IES300.API.Services.Services
 {
@@ -33,6 +31,9 @@ namespace IES300.API.Services.Services
 
             _patrocinadorRepository.Inserir(patrocinador);
 
+            if (patrocinador.Id == 0)
+                throw new NullReferenceException("Falha ao inserir Patrocinador");
+
             return new PatrocinadorOutputDTO()
             {
                 Id = patrocinador.Id,
@@ -45,9 +46,9 @@ namespace IES300.API.Services.Services
             };
         }
 
-        public List<PatrocinadorOutputDTO> ObterTodosPatrocinadores()
+        public List<PatrocinadorOutputDTO> ObterTodosPatrocinadores(bool ativado)
         {
-            var listaPatrocinadores = _patrocinadorRepository.ObterTodos().Where(x => x.Ativado);
+            var listaPatrocinadores = _patrocinadorRepository.ObterTodos().Where(x => x.Ativado == ativado);
 
             return listaPatrocinadores.Select(x =>
             {
@@ -66,7 +67,13 @@ namespace IES300.API.Services.Services
 
         public PatrocinadorOutputDTO ObterPatrocinadorPorId(int id)
         {
+            if (id < 1)
+                throw new ArgumentException($"Id: {id} está inválido");
+
             var patrocinador = _patrocinadorRepository.ObterPorId(id);
+
+            if (patrocinador == null || !patrocinador.Ativado)
+                throw new KeyNotFoundException($"Patrocinador com Id: {id} não encontrado");
 
             return new PatrocinadorOutputDTO()
             {
@@ -107,11 +114,15 @@ namespace IES300.API.Services.Services
             };
         }
 
-        public PatrocinadorInputDTO DeletarPatrocinador(int id)
+        public void DeletarPatrocinador(int id)
         {
-            _patrocinadorRepository.Deletar(id);
+            if (id < 1)
+                throw new ArgumentException($"Id: {id} está inválido");
+            
+            var retorno = _patrocinadorRepository.Deletar(id);
 
-            return null;
+            if (!retorno)
+                throw new KeyNotFoundException($"Patrocinador com Id: {id} não encontrado");
         }
     }
 }
