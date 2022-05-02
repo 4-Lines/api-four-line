@@ -2,7 +2,7 @@
 
 namespace IES300.API.Domain.DTOs.Patrocinador
 {
-    public class PatrocinadorInputDTO
+    public class PatrocinadorInsertDTO
     {
         [Required(ErrorMessage = "Campo nome obrigatório")]
         public string Nome { get; set; }

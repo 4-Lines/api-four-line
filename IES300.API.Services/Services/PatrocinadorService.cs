@@ -17,15 +17,17 @@ namespace IES300.API.Services.Services
             _patrocinadorRepository = patrocinadorRepository;
         }
 
-        public PatrocinadorOutputDTO InserirPatrocinador(PatrocinadorInputDTO patrocinadorInput)
+        public PatrocinadorOutputDTO InserirPatrocinador(PatrocinadorInsertDTO patrocinadorInsert)
         {
+            this.ExisteEmailIgual(patrocinadorInsert.Email);
+
             var patrocinador = new Patrocinador()
             {
-                Nome = patrocinadorInput.Nome,
-                Email = patrocinadorInput.Email,
-                Celular = patrocinadorInput.Celular,
-                UrlLogo = patrocinadorInput.UrlLogo,
-                Website = patrocinadorInput.Website,
+                Nome = patrocinadorInsert.Nome,
+                Email = patrocinadorInsert.Email,
+                Celular = patrocinadorInsert.Celular,
+                UrlLogo = patrocinadorInsert.UrlLogo,
+                Website = patrocinadorInsert.Website,
                 Ativado = true
             };
 
@@ -87,18 +89,21 @@ namespace IES300.API.Services.Services
             };
         }
 
-        public PatrocinadorOutputDTO AlterarPatrocinador(PatrocinadorOutputDTO patrocinadorOutput)
+        public PatrocinadorOutputDTO AlterarPatrocinador(PatrocinadorUpdatetDTO patrocinadorUpdate)
         {
-            var patrocinador = _patrocinadorRepository.ObterPorId(patrocinadorOutput.Id);
+            this.ObterPatrocinadorPorId(patrocinadorUpdate.Id);
+            this.ExisteEmailIgual(patrocinadorUpdate.Email, patrocinadorUpdate.Id);
 
-            if (patrocinador == null)
-                return null;
-
-            patrocinador.Nome = patrocinadorOutput.Nome;
-            patrocinador.Email = patrocinadorOutput.Email;
-            patrocinador.Celular = patrocinadorOutput.Celular;
-            patrocinador.UrlLogo = patrocinadorOutput.UrlLogo;
-            patrocinador.Website = patrocinadorOutput.Website;
+            var patrocinador = new Patrocinador()
+            {
+                Id = patrocinadorUpdate.Id,
+                Nome = patrocinadorUpdate.Nome,
+                Email = patrocinadorUpdate.Email,
+                Celular = patrocinadorUpdate.Celular,
+                UrlLogo = patrocinadorUpdate.UrlLogo,
+                Website = patrocinadorUpdate.Website,
+                Ativado = true
+            };
 
             _patrocinadorRepository.Alterar(patrocinador);
 
@@ -123,6 +128,14 @@ namespace IES300.API.Services.Services
 
             if (!retorno)
                 throw new KeyNotFoundException($"Patrocinador com Id: {id} não encontrado");
+        }
+
+        private void ExisteEmailIgual(string email, int id = 0)
+        {
+            var retorno = _patrocinadorRepository.EmailExistenteDePatrocinador(email, id);
+
+            if (retorno)
+                throw new ArgumentException($"Email: {email} já existe");
         }
     }
 }
