@@ -15,10 +15,12 @@ namespace IES300.API.Application.Controllers
     public class TemaController : ControllerBase
     {
         private readonly ITemaService _temaService;
+
         public TemaController(ITemaService temaService)
         {
             _temaService = temaService;
         }
+
         [HttpGet]
         public IActionResult ObterTodosTemas()
         {
@@ -33,6 +35,7 @@ namespace IES300.API.Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
+
         [HttpGet("{id:int}")]
         public IActionResult ObterTemaPorId(int id)
         {
@@ -55,8 +58,9 @@ namespace IES300.API.Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
+
         [HttpPut]
-        public IActionResult AlterarTema([FromBody] TemaInputDTO tema)
+        public IActionResult AlterarTema([FromBody] TemaUpdateDTO tema)
         {
             try
             {
@@ -80,8 +84,9 @@ namespace IES300.API.Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
+
         [HttpPost]
-        public IActionResult InserirTema([FromBody] TemaInputDTO tema)
+        public IActionResult InserirTema([FromBody] TemaInsertDTO tema)
         {
             try
             {
@@ -90,16 +95,22 @@ namespace IES300.API.Application.Controllers
                 
                 var response = _temaService.InserirTema(tema);
 
-                if (response == null)
-                    return BadRequest();
-
-                return Ok();
+                return StatusCode((int)HttpStatusCode.Created, response);
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
         [HttpDelete("{id:int}")]
         public IActionResult DeletarTema(int id)
         {

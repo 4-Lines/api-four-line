@@ -93,8 +93,6 @@ namespace IES300.API.Application.Controllers
                     return BadRequest();
 
                 var fichaOutputRetorno = _fichaService.AlterarFicha(fichaUpdate);
-                if (fichaOutputRetorno == null)
-                    return BadRequest();
 
                 return Ok(fichaOutputRetorno);
             }

@@ -88,9 +88,9 @@ namespace IES300.API.Services.Services
                 Id = fichaUpdate.Id,
                 Nome = fichaUpdate.Nome,
                 UrlFicha = fichaUpdate.UrlFicha,
-                IdTema = fichaUpdate.IdTema,
-                Ativado = true
+                IdTema = fichaUpdate.IdTema
             };
+
             _fichaRepository.Alterar(ficha);
 
             return new FichaOutputDTO()
