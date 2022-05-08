@@ -49,9 +49,11 @@ namespace IES300.API.Application
 
             services.AddScoped(typeof(IPatrocinadorRepository), typeof(PatrocinadorRepository));
             services.AddScoped(typeof(ITemaRepository), typeof(TemaRepository));
+            services.AddScoped(typeof(IFichaRepository), typeof(FichaRepository));
 
             services.AddTransient(typeof(IPatrocinadorService), typeof(PatrocinadorService));
             services.AddTransient(typeof(ITemaService), typeof(TemaService));
+            services.AddTransient(typeof(IFichaService), typeof(FichaService));
 
             services.AddCors();
         }
