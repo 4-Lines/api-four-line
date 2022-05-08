@@ -19,6 +19,7 @@ namespace IES300.API.Services.Services
         }
         public TemaOutputDTO AlterarTema(TemaInputDTO temaInput)
         {
+            this.ObterTemaPorId(temaInput.Id);
             if (_temaRepository.ObterPorId(temaInput.Id) != null)
                 return null;
 
@@ -44,7 +45,15 @@ namespace IES300.API.Services.Services
 
         public void DeletarTema(int id)
         {
-            _temaRepository.Deletar(id);
+            if(id < 1){
+                throw new ArgumentException($"Id {id} inválido");
+            }
+
+            var retorno = _temaRepository.Deletar(id);
+
+            if(!retorno){
+                throw new KeyNotFoundException($"Tema com Id {id} não encontrado");
+            }     
         }
 
         public TemaOutputDTO InserirTema(TemaInputDTO TemaInput)
@@ -69,7 +78,24 @@ namespace IES300.API.Services.Services
 
         public TemaOutputDTO ObterTemaPorId(int id)
         {
-            throw new NotImplementedException(); //Função aqui
+            if(id < 1){
+                throw new ArgumentException($"Id:{id} está inválido");
+            }
+            
+             var tema = _temaRepository.ObterPorId(id);
+
+            if(tema == null || !tema.Ativado){
+                throw new KeyNotFoundException($"Tema com Id: {id} não encontrado");
+            }
+
+            return new TemaOutputDTO(){
+                Nome = tema.Nome,
+                IdPatrocinador = tema.IdPatrocinador,
+                UrlTabuleiro = tema.UrlTabuleiro  ,
+                Id = tema.Id,
+                Ativado = tema.Ativado      
+            };
+            
         }
 
         public List<TemaOutputDTO> ObterTodosTemas()
