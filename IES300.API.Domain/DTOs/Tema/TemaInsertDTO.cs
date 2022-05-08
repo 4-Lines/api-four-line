@@ -2,20 +2,15 @@
 
 namespace IES300.API.Domain.DTOs.Tema
 {
-    public class TemaInputDTO
+    public class TemaInsertDTO
     {
-        [Required]
-        public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Campo Nome é obrigatório")]
         public string Nome { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Campo UrlTabuleiro é obrigatório")]
         public string UrlTabuleiro { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Campo IdPatrocinador é obrigatório")]
         public int IdPatrocinador { get; set; }
-
-        [Required]
-        public bool Ativado { get; set; }
     }
 }

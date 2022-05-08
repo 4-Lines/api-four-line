@@ -5,11 +5,10 @@ namespace IES300.API.Domain.Interfaces.Services
 {
     public interface ITemaService
     {
-        TemaOutputDTO InserirTema(TemaInputDTO TemaInput);
-        List<TemaOutputDTO> ObterTodosTemas();
+        TemaOutputDTO InserirTema(TemaInsertDTO TemaInput);
+        List<TemaOutputDTO> ObterTodosTemas(bool ativado = true);
         TemaOutputDTO ObterTemaPorId(int id);
         void DeletarTema(int id);
-        TemaOutputDTO AlterarTema(TemaInputDTO temaInput);
-
+        TemaOutputDTO AlterarTema(TemaUpdateDTO temaInput);
     }
 }

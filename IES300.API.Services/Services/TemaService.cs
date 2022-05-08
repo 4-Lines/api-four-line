@@ -5,102 +5,104 @@ using IES300.API.Domain.Interfaces.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace IES300.API.Services.Services
 {
     public class TemaService : ITemaService
     {
         private readonly ITemaRepository _temaRepository;
+
         public TemaService(ITemaRepository temaRepository)
         {
             _temaRepository = temaRepository;
         }
-        public TemaOutputDTO AlterarTema(TemaInputDTO temaInput)
-        {
-            this.ObterTemaPorId(temaInput.Id);
-            if (_temaRepository.ObterPorId(temaInput.Id) != null)
-                return null;
 
-            var oTema = new Tema()
+        public TemaOutputDTO AlterarTema(TemaUpdateDTO temaUpdate)
+        {
+
+            this.ObterTemaPorId(temaUpdate.Id);
+
+            var tema = new Tema()
             {
-                Ativado = temaInput.Ativado,
-                Id = temaInput.Id,
-                Nome = temaInput.Nome,
-                IdPatrocinador = temaInput.IdPatrocinador,
-                UrlTabuleiro = temaInput.UrlTabuleiro
+                Id = temaUpdate.Id,
+                Nome = temaUpdate.Nome,
+                IdPatrocinador = temaUpdate.IdPatrocinador,
+                UrlTabuleiro = temaUpdate.UrlTabuleiro
             };
-            _temaRepository.Alterar(oTema);
+
+            _temaRepository.Alterar(tema);
 
             return new TemaOutputDTO()
             {
-                Ativado = temaInput.Ativado,
-                Id = temaInput.Id,
-                IdPatrocinador = temaInput.IdPatrocinador,
-                Nome = temaInput.Nome,
-                UrlTabuleiro = temaInput.UrlTabuleiro
+                Ativado = tema.Ativado,
+                Id = tema.Id,
+                IdPatrocinador = tema.IdPatrocinador,
+                Nome = tema.Nome,
+                UrlTabuleiro = tema.UrlTabuleiro
             };
         }
 
         public void DeletarTema(int id)
         {
-            if(id < 1){
-                throw new ArgumentException($"Id {id} inválido");
-            }
+            if (id < 1)
+                throw new ArgumentException($"Id: {id} está inválido");
 
             var retorno = _temaRepository.Deletar(id);
 
-            if(!retorno){
-                throw new KeyNotFoundException($"Tema com Id {id} não encontrado");
-            }     
+            if (!retorno)
+                throw new KeyNotFoundException($"Tema com Id: {id} não encontrado");
         }
 
-        public TemaOutputDTO InserirTema(TemaInputDTO TemaInput)
+        public TemaOutputDTO InserirTema(TemaInsertDTO TemaInput)
         {
-            var oTema = new Tema()
+            var tema = new Tema()
             {
                 Ativado = true,
                 IdPatrocinador = TemaInput.IdPatrocinador,
                 Nome = TemaInput.Nome,
-                UrlTabuleiro = TemaInput.UrlTabuleiro                
+                UrlTabuleiro = TemaInput.UrlTabuleiro          
             };
 
-            _temaRepository.Inserir(oTema);
+            _temaRepository.Inserir(tema);
+
+            if (tema.Id == 0)
+                throw new NullReferenceException("Falha ao inserir Patrocinador");
 
             return new TemaOutputDTO()
             {
-                Nome = TemaInput.Nome,
-                IdPatrocinador = TemaInput.IdPatrocinador,
-                UrlTabuleiro = TemaInput.UrlTabuleiro
+                Nome = tema.Nome,
+                IdPatrocinador = tema.IdPatrocinador,
+                UrlTabuleiro = tema.UrlTabuleiro,
+                Ativado = tema.Ativado,
+                Id = tema.Id
             };
         }
 
         public TemaOutputDTO ObterTemaPorId(int id)
         {
-            if(id < 1){
-                throw new ArgumentException($"Id:{id} está inválido");
-            }
-            
-             var tema = _temaRepository.ObterPorId(id);
 
-            if(tema == null || !tema.Ativado){
+            if (id < 1)
+                throw new ArgumentException($"Id: {id} está inválido");
+
+            var tema = _temaRepository.ObterPorId(id);
+
+            if (tema == null || !tema.Ativado)
                 throw new KeyNotFoundException($"Tema com Id: {id} não encontrado");
-            }
 
-            return new TemaOutputDTO(){
-                Nome = tema.Nome,
-                IdPatrocinador = tema.IdPatrocinador,
-                UrlTabuleiro = tema.UrlTabuleiro  ,
+            return new TemaOutputDTO()
+            {
                 Id = tema.Id,
-                Ativado = tema.Ativado      
+                Nome = tema.Nome,
+                UrlTabuleiro = tema.UrlTabuleiro,
+                IdPatrocinador = tema.IdPatrocinador,
+                Ativado = tema.Ativado
             };
-            
+
         }
 
-        public List<TemaOutputDTO> ObterTodosTemas()
+        public List<TemaOutputDTO> ObterTodosTemas(bool ativado)
         {
-            var listaTemas = _temaRepository.ObterTodos();
+            var listaTemas = _temaRepository.ObterTodos().Where(x => x.Ativado == ativado);
 
             return listaTemas.Select(x =>
             {

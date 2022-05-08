@@ -101,8 +101,7 @@ namespace IES300.API.Services.Services
                 Email = patrocinadorUpdate.Email,
                 Celular = patrocinadorUpdate.Celular,
                 UrlLogo = patrocinadorUpdate.UrlLogo,
-                Website = patrocinadorUpdate.Website,
-                Ativado = true
+                Website = patrocinadorUpdate.Website
             };
 
             _patrocinadorRepository.Alterar(patrocinador);
