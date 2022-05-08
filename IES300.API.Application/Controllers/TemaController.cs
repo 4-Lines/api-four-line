@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 namespace IES300.API.Application.Controllers
@@ -23,11 +24,13 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                return null;  //Função de retorno aqui
+                var listatemasOutput = _temaService.ObterTodosTemas();
+
+                return Ok(listatemasOutput);
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
         [HttpGet("{id:int}")]
@@ -35,11 +38,21 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                return null; //Função de retorno aqui
+                var temaOutput = _temaService.ObterTemaPorId(id);
+
+                return Ok(temaOutput);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
         [HttpPut]
@@ -47,11 +60,24 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                return null; //Função de retorno aqui
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                var temaOutputRetorno = _temaService.AlterarTema(tema);
+
+                return Ok(temaOutputRetorno);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
         [HttpPost]
@@ -79,11 +105,21 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                return null; //Função de retorno aqui
+                _temaService.DeletarTema(id);
+
+                return Ok(new { message = $"Tema de Id: {id} foi deletado com sucesso" });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
     }
