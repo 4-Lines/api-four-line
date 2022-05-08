@@ -23,7 +23,8 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                return null;  //Função de retorno aqui
+                var listaTemas = _temaService.ObterTodosTemas();
+                return Ok(listaTemas);  //Função de retorno aqui
             }
             catch (Exception ex)
             {
@@ -35,19 +36,25 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                return null; //Função de retorno aqui
+                var TemaOutput = _temaService.ObterTemaPorId(id);
+                return Ok(TemaOutput);
             }
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
+
         }
         [HttpPut]
-        public IActionResult AlterarTema([FromBody] TemaInputDTO tema)
+        public IActionResult AlterarTema([FromBody] TemaInputDTO temaInput)
         {
             try
             {
-                return null; //Função de retorno aqui
+                if(!ModelState.IsValid){
+                    return BadRequest();
+                }
+                var alterarOutputRetorno = _temaService.AlterarTema(temaInput);
+                return Ok(alterarOutputRetorno);
             }
             catch (Exception ex)
             {
@@ -79,12 +86,14 @@ namespace IES300.API.Application.Controllers
         {
             try
             {
-                return null; //Função de retorno aqui
+                _temaService.DeletarTema(id);
+                return Ok(new { msg = $"Tema Id: {id} deletado com sucesso"});
             }
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
+            
         }
     }
 }
