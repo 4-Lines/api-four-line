@@ -91,7 +91,7 @@ namespace IES300.API.Services.Services
 
         public PatrocinadorOutputDTO AlterarPatrocinador(PatrocinadorUpdatetDTO patrocinadorUpdate)
         {
-            this.ObterPatrocinadorPorId(patrocinadorUpdate.Id);
+            var patrocinadorOutput = this.ObterPatrocinadorPorId(patrocinadorUpdate.Id);
             this.ExisteEmailIgual(patrocinadorUpdate.Email, patrocinadorUpdate.Id);
 
             var patrocinador = new Patrocinador()
@@ -101,7 +101,8 @@ namespace IES300.API.Services.Services
                 Email = patrocinadorUpdate.Email,
                 Celular = patrocinadorUpdate.Celular,
                 UrlLogo = patrocinadorUpdate.UrlLogo,
-                Website = patrocinadorUpdate.Website
+                Website = patrocinadorUpdate.Website,
+                Ativado = patrocinadorOutput.Ativado
             };
 
             _patrocinadorRepository.Alterar(patrocinador);

@@ -81,14 +81,15 @@ namespace IES300.API.Services.Services
 
         public FichaOutputDTO AlterarFicha(FichaUpdateDTO fichaUpdate)
         {
-            this.ObterFichaPorId(fichaUpdate.Id);
+            var fichaOutput = this.ObterFichaPorId(fichaUpdate.Id);
 
             var ficha = new Ficha()
             {
                 Id = fichaUpdate.Id,
                 Nome = fichaUpdate.Nome,
                 UrlFicha = fichaUpdate.UrlFicha,
-                IdTema = fichaUpdate.IdTema
+                IdTema = fichaUpdate.IdTema,
+                Ativado = fichaOutput.Ativado
             };
 
             _fichaRepository.Alterar(ficha);

@@ -19,15 +19,15 @@ namespace IES300.API.Services.Services
 
         public TemaOutputDTO AlterarTema(TemaUpdateDTO temaUpdate)
         {
-
-            this.ObterTemaPorId(temaUpdate.Id);
+            var temaOutput = this.ObterTemaPorId(temaUpdate.Id);
 
             var tema = new Tema()
             {
                 Id = temaUpdate.Id,
                 Nome = temaUpdate.Nome,
                 IdPatrocinador = temaUpdate.IdPatrocinador,
-                UrlTabuleiro = temaUpdate.UrlTabuleiro
+                UrlTabuleiro = temaUpdate.UrlTabuleiro,
+                Ativado = temaOutput.Ativado
             };
 
             _temaRepository.Alterar(tema);
