@@ -20,32 +20,6 @@ namespace IES300.API.Application.Controllers
             _patrocinadorService = patrocinadorService;
         }
 
-        [HttpPost]
-        public IActionResult InserirPatrocinador([FromBody] PatrocinadorInsertDTO patrocinadorInsert)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest();
-
-                var patrocinadorOutput = _patrocinadorService.InserirPatrocinador(patrocinadorInsert);
-
-                return StatusCode((int)HttpStatusCode.Created, patrocinadorOutput);
-            }
-            catch(NullReferenceException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch(ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch(Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
-            }
-        }
-
         [HttpGet]       
         public IActionResult ObterTodosPatrocinadores()
         {
@@ -81,6 +55,32 @@ namespace IES300.API.Application.Controllers
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message } );
+            }
+        }
+
+        [HttpPost]
+        public IActionResult InserirPatrocinador([FromBody] PatrocinadorInsertDTO patrocinadorInsert)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                var patrocinadorOutput = _patrocinadorService.InserirPatrocinador(patrocinadorInsert);
+
+                return StatusCode((int)HttpStatusCode.Created, patrocinadorOutput);
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
 

@@ -59,6 +59,32 @@ namespace IES300.API.Application.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult InserirTema([FromBody] TemaInsertDTO tema)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                var response = _temaService.InserirTema(tema);
+
+                return StatusCode((int)HttpStatusCode.Created, response);
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         [HttpPut]
         public IActionResult AlterarTema([FromBody] TemaUpdateDTO tema)
         {
@@ -82,32 +108,6 @@ namespace IES300.API.Application.Controllers
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
-            }
-        }
-
-        [HttpPost]
-        public IActionResult InserirTema([FromBody] TemaInsertDTO tema)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest();
-                
-                var response = _temaService.InserirTema(tema);
-
-                return StatusCode((int)HttpStatusCode.Created, response);
-            }
-            catch (NullReferenceException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 

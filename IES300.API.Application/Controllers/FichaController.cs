@@ -20,32 +20,6 @@ namespace IES300.API.Application.Controllers
             _fichaService = fichaService;
         }
 
-        [HttpPost]
-        public IActionResult InserirFicha([FromBody] FichaInsertDTO fichaInsert)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                    return BadRequest();
-
-                var fichaOutput = _fichaService.InserirFicha(fichaInsert);
-
-                return StatusCode((int)HttpStatusCode.Created, fichaOutput);
-            }
-            catch (NullReferenceException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
-            }
-        }
-
         [HttpGet]
         public IActionResult ObterTodosFichas()
         {
@@ -73,6 +47,32 @@ namespace IES300.API.Application.Controllers
             catch (KeyNotFoundException ex)
             {
                 return NotFound(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult InserirFicha([FromBody] FichaInsertDTO fichaInsert)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                var fichaOutput = _fichaService.InserirFicha(fichaInsert);
+
+                return StatusCode((int)HttpStatusCode.Created, fichaOutput);
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
             catch (ArgumentException ex)
             {
