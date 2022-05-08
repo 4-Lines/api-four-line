@@ -69,7 +69,22 @@ namespace IES300.API.Services.Services
 
         public TemaOutputDTO ObterTemaPorId(int id)
         {
-            throw new NotImplementedException(); //Função aqui
+            if (id < 1)
+                throw new ArgumentException($"Id: {id} está inválido");
+
+            var tema = _temaRepository.ObterPorId(id);
+
+            if (tema == null || !tema.Ativado)
+                throw new KeyNotFoundException($"Tema com Id: {id} não encontrado");
+
+            return new TemaOutputDTO()
+            {
+                Id = tema.Id,
+                Nome = tema.Nome,
+                UrlTabuleiro = tema.UrlTabuleiro,
+                IdPatrocinador = tema.IdPatrocinador,
+                Ativado = tema.Ativado
+            };
         }
 
         public List<TemaOutputDTO> ObterTodosTemas()
