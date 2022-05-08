@@ -57,6 +57,7 @@ namespace IES300.API.Application.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
+
         }
 
         [HttpPost]
@@ -132,6 +133,7 @@ namespace IES300.API.Application.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
+            
         }
     }
 }
