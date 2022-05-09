@@ -10,6 +10,8 @@
 
         public int IdTema { get; set; }
 
+        public string NomeTema { get; set; }
+
         public bool Ativado { get; set; }
     }
 }

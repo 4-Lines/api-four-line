@@ -44,7 +44,7 @@ namespace IES300.API.Services.Services
 
         public List<FichaOutputDTO> ObterTodosFichas(bool ativado)
         {
-            var listaFichas = _fichaRepository.ObterTodos().Where(x => x.Ativado == ativado);
+            var listaFichas = _fichaRepository.ObterTodasFichasComTema().Where(x => x.Ativado == ativado);
 
             return listaFichas.Select(x =>
             {
@@ -53,8 +53,9 @@ namespace IES300.API.Services.Services
                     Id = x.Id,
                     Nome = x.Nome,
                     UrlFicha = x.UrlFicha,
-                    IdTema = x.IdTema,
-                    Ativado = x.Ativado
+                    Ativado = x.Ativado,
+                    IdTema = x.Tema.Id,
+                    NomeTema = x.Tema.Nome
                 };
             }).ToList();
         }

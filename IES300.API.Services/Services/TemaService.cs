@@ -102,7 +102,7 @@ namespace IES300.API.Services.Services
 
         public List<TemaOutputDTO> ObterTodosTemas(bool ativado)
         {
-            var listaTemas = _temaRepository.ObterTodos().Where(x => x.Ativado == ativado);
+            var listaTemas = _temaRepository.ObterTodosTemasComPatrocinador().Where(x => x.Ativado == ativado);
 
             return listaTemas.Select(x =>
             {
@@ -111,8 +111,9 @@ namespace IES300.API.Services.Services
                     Id = x.Id,
                     Nome = x.Nome,
                     Ativado = x.Ativado,
-                    IdPatrocinador = x.IdPatrocinador,
-                    UrlTabuleiro = x.UrlTabuleiro
+                    UrlTabuleiro = x.UrlTabuleiro,
+                    IdPatrocinador = x.Patrocinador.Id,
+                    NomePatrocinador = x.Patrocinador.Nome,
                 };
             }).ToList();
         }

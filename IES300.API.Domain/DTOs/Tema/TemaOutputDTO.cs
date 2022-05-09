@@ -10,6 +10,8 @@
 
         public int IdPatrocinador { get; set; }
 
+        public string NomePatrocinador { get; set; }
+
         public bool Ativado { get; set; }       
     }
 }
