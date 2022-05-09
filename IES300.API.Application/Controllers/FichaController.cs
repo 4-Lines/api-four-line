@@ -74,10 +74,6 @@ namespace IES300.API.Application.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });

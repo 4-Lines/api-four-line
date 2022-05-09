@@ -10,5 +10,6 @@ namespace IES300.API.Domain.Interfaces.Services
         TemaOutputDTO ObterTemaPorId(int id);
         void DeletarTema(int id);
         TemaOutputDTO AlterarTema(TemaUpdateDTO temaInput);
+        TemaFichaOutputDTO InserirTemaComFichas(TemaFichasInsertDTO temaFichasDTO);
     }
 }

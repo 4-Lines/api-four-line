@@ -60,7 +60,7 @@ namespace IES300.API.Services.Services
                 Ativado = true,
                 IdPatrocinador = TemaInput.IdPatrocinador,
                 Nome = TemaInput.Nome,
-                UrlTabuleiro = TemaInput.UrlTabuleiro          
+                UrlTabuleiro = TemaInput.UrlTabuleiro
             };
 
             _temaRepository.Inserir(tema);
@@ -116,6 +116,68 @@ namespace IES300.API.Services.Services
                     NomePatrocinador = x.Patrocinador.Nome,
                 };
             }).ToList();
+        }
+
+        public TemaFichaOutputDTO InserirTemaComFichas(TemaFichasInsertDTO temaFichasDTO)
+        {
+            var ficha1 = new Ficha()
+            {
+                Nome = temaFichasDTO.NomeFicha1,
+                UrlFicha = temaFichasDTO.UrlFicha1,
+                Ativado = true
+            };
+
+            var ficha2 = new Ficha()
+            {
+                Nome = temaFichasDTO.NomeFicha2,
+                UrlFicha = temaFichasDTO.UrlFicha2,
+                Ativado = true
+            };
+
+            var listaFicha = new List<Ficha>();
+
+            listaFicha.Add(ficha1);
+            listaFicha.Add(ficha2);
+
+            var tema = new Tema()
+            {
+                Ativado = true,
+                IdPatrocinador = temaFichasDTO.IdPatrocinador,
+                Nome = temaFichasDTO.NomeTema,
+                UrlTabuleiro = temaFichasDTO.UrlTabuleiro,
+                Fichas = listaFicha
+            };
+
+            _temaRepository.Inserir(tema);
+
+            if (tema.Id == 0)
+                throw new NullReferenceException("Falha ao inserir Tema");
+
+            ficha1 = tema.Fichas.FirstOrDefault(x => x.Id == ficha1.Id);
+            ficha2 = tema.Fichas.FirstOrDefault(x => x.Id == ficha2.Id);
+
+            if(ficha1.Id == 0)
+                throw new NullReferenceException("Falha ao inserir Ficha 1");
+
+            if (ficha2.Id == 0)
+                throw new NullReferenceException("Falha ao inserir Ficha 2");
+
+            return new TemaFichaOutputDTO()
+            {
+                IdTema = tema.Id,
+                NomeTema = tema.Nome,
+                IdPatrocinador = tema.IdPatrocinador,
+                UrlTabuleiro = tema.UrlTabuleiro,
+                AtivadoTema = tema.Ativado,
+                IdFicha1 = ficha1.Id,
+                NomeFicha1 = ficha1.Nome,
+                UrlFicha1 = ficha1.UrlFicha,
+                AtivadoFicha1 = ficha1.Ativado,
+                IdFicha2 = ficha2.Id,
+                NomeFicha2 = ficha2.Nome,
+                UrlFicha2 = ficha2.UrlFicha,
+                AtivadoFicha2 = ficha2.Ativado
+            };
         }
     }
 }

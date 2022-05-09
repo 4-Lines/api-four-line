@@ -76,10 +76,6 @@ namespace IES300.API.Application.Controllers
             {
                 return BadRequest(new { message = ex.Message });
             }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
@@ -133,7 +129,29 @@ namespace IES300.API.Application.Controllers
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
-            
+        }
+
+        [HttpPost]
+        [Route("Fichas")]
+        public IActionResult InserirTemaComFichas([FromBody] TemaFichasInsertDTO temaFichasDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest();
+
+                var response = _temaService.InserirTemaComFichas(temaFichasDTO);
+
+                return StatusCode((int)HttpStatusCode.Created, response);
+            }
+            catch (NullReferenceException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }
