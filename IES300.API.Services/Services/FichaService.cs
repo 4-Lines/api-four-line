@@ -85,6 +85,10 @@ namespace IES300.API.Services.Services
         {
             var fichaOutput = this.ObterFichaPorId(fichaUpdate.Id);
 
+            var countFichasPorTema = _fichaRepository.ObterFichasPorIdTema(fichaOutput.IdTema).Count();
+            if (countFichasPorTema < 3 && fichaUpdate.IdTema != fichaOutput.IdTema)
+                throw new InvalidOperationException($"Impossível alterar ficha, seu Tema tem menos de 3 Peças");
+
             var ficha = new Ficha()
             {
                 Id = fichaUpdate.Id,
