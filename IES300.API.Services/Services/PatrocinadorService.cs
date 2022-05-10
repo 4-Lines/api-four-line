@@ -11,10 +11,12 @@ namespace IES300.API.Services.Services
     public class PatrocinadorService : IPatrocinadorService
     {
         private readonly IPatrocinadorRepository _patrocinadorRepository;
+        private readonly ITemaRepository _temaRepository;
 
-        public PatrocinadorService(IPatrocinadorRepository patrocinadorRepository)
+        public PatrocinadorService(IPatrocinadorRepository patrocinadorRepository, ITemaRepository temaRepository)
         {
             _patrocinadorRepository = patrocinadorRepository;
+            _temaRepository = temaRepository;
         }
 
         public PatrocinadorOutputDTO InserirPatrocinador(PatrocinadorInsertDTO patrocinadorInsert)
@@ -128,6 +130,13 @@ namespace IES300.API.Services.Services
 
             if (!retorno)
                 throw new KeyNotFoundException($"Patrocinador com Id: {id} não encontrado");
+
+            var patrocinadorTemas = _temaRepository.ObterTemasPorIdPatrocinador(id).Where(x => x.Ativado == true);
+
+            foreach (var tema in patrocinadorTemas)
+            {
+                _temaRepository.Deletar(tema.Id);
+            }
         }
 
         private void ExisteEmailIgual(string email, int id = 0)

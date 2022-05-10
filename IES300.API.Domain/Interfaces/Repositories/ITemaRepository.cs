@@ -8,5 +8,6 @@ namespace IES300.API.Domain.Interfaces.Repositories
     {
         List<Tema> ObterTodosTemasComPatrocinador();
         Tema ObterTemaPorIdComPatrocinador(int id, bool asNoTracking = true);
+        List<Tema> ObterTemasPorIdPatrocinador(int idPatrocinador);
     }
 }

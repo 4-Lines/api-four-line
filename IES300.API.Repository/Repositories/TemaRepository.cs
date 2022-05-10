@@ -20,6 +20,11 @@ namespace IES300.API.Repository.Repositories
             return query.Include(x => x.Patrocinador).FirstOrDefault(x => x.Id == id);
         }
 
+        public List<Tema> ObterTemasPorIdPatrocinador(int idPatrocinador)
+        {
+            return _dbSet.Where(x => x.IdPatrocinador == idPatrocinador).AsNoTracking().ToList();
+        }
+
         public List<Tema> ObterTodosTemasComPatrocinador()
         {
             return _dbSet.Include(x => x.Patrocinador).ToList();
