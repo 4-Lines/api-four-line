@@ -10,7 +10,7 @@ namespace IES300.API.Domain.DTOs.Tema
         [Required(ErrorMessage = "Campo UrlTabuleiro é obrigatório")]
         public string UrlTabuleiro { get; set; }
 
-        [Required(ErrorMessage = "Campo IdPatrocinador é obrigatório")]
+        [Range(1, 9999999, ErrorMessage = "Campo IdPatrocinador obrigatório")]
         public int IdPatrocinador { get; set; }
 
         [Required(ErrorMessage = "Campo nome ficha 1 é obrigatório")]

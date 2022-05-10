@@ -4,7 +4,7 @@ namespace IES300.API.Domain.DTOs.Tema
 {
     public class TemaUpdateDTO
     {
-        [Required(ErrorMessage = "Campo Id é obrigatório")]
+        [Range(1, 9999999, ErrorMessage = "Campo Id obrigatório")]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Campo Nome é obrigatório")]
@@ -13,7 +13,7 @@ namespace IES300.API.Domain.DTOs.Tema
         [Required(ErrorMessage = "Campo UrlTabuleiro é obrigatório")]
         public string UrlTabuleiro { get; set; }
 
-        [Required(ErrorMessage = "Campo IdPatrocinador é obrigatório")]
+        [Range(1, 9999999, ErrorMessage = "Campo IdPatrocinador obrigatório")]
         public int IdPatrocinador { get; set; }
     }
 }

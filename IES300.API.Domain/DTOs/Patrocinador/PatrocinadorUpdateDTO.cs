@@ -4,7 +4,7 @@ namespace IES300.API.Domain.DTOs.Patrocinador
 {
     public class PatrocinadorUpdatetDTO
     {
-        [Required(ErrorMessage = ("Campo id obrigatório"))]
+        [Range(1, 9999999, ErrorMessage = "Campo Id obrigatório")]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Campo nome obrigatório")]

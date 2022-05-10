@@ -11,10 +11,12 @@ namespace IES300.API.Services.Services
     public class TemaService : ITemaService
     {
         private readonly ITemaRepository _temaRepository;
+        private readonly IFichaRepository _fichaRepository;
 
-        public TemaService(ITemaRepository temaRepository)
+        public TemaService(ITemaRepository temaRepository, IFichaRepository fichaRepository)
         {
             _temaRepository = temaRepository;
+            _fichaRepository = fichaRepository;
         }
 
         public TemaOutputDTO AlterarTema(TemaUpdateDTO temaUpdate)
@@ -51,6 +53,13 @@ namespace IES300.API.Services.Services
 
             if (!retorno)
                 throw new KeyNotFoundException($"Tema com Id: {id} não encontrado");
+
+            var fichasTema = _fichaRepository.ObterFichasPorIdTema(id).Where(x => x.Ativado == true);
+
+            foreach (var ficha in fichasTema)
+            {
+                _fichaRepository.Deletar(ficha.Id);
+            }
         }
 
         public TemaOutputDTO InserirTema(TemaInsertDTO TemaInput)

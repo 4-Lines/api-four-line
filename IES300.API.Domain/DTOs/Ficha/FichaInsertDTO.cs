@@ -10,7 +10,7 @@ namespace IES300.API.Domain.DTOs.Ficha
         [Required(ErrorMessage = "Campo urlFicha obrigatório")]
         public string UrlFicha { get; set; }
 
-        [Required(ErrorMessage = "Campo idTema obrigatório")]
+        [Range(1, 9999999, ErrorMessage = "Campo idTema obrigatório")]
         public int IdTema { get; set; }
     }
 }

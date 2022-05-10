@@ -10,6 +10,11 @@ namespace IES300.API.Repository.Repositories
     {
         public FichaRepository(ApiDbContext context) : base(context) { }
 
+        public List<Ficha> ObterFichasPorIdTema(int idTema)
+        {
+            return _dbSet.Where(x => x.IdTema == idTema).AsNoTracking().ToList();
+        }
+
         public List<Ficha> ObterTodasFichasComTema()
         {
             return _dbSet.Include(x => x.Tema).ToList();
