@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IES300.API.Domain\IES300.API.Domain.csproj" />
+    <ProjectReference Include="..\IES300.API.Repository\IES300.API.Repository.csproj" />
   </ItemGroup>
 
 </Project>
