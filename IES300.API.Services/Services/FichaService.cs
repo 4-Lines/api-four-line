@@ -65,7 +65,7 @@ namespace IES300.API.Services.Services
             if (id < 1)
                 throw new ArgumentException($"Id: {id} está inválido");
 
-            var ficha = _fichaRepository.ObterPorId(id);
+            var ficha = _fichaRepository.ObterFichaPorIdComTema(id);
 
             if (ficha == null || !ficha.Ativado)
                 throw new KeyNotFoundException($"Ficha com Id: {id} não encontrada");
@@ -76,7 +76,8 @@ namespace IES300.API.Services.Services
                 Nome = ficha.Nome,
                 UrlFicha = ficha.UrlFicha,
                 IdTema = ficha.IdTema,
-                Ativado = ficha.Ativado
+                Ativado = ficha.Ativado,
+                NomeTema = ficha.Tema.Nome
             };
         }
 
