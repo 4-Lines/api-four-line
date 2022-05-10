@@ -2,7 +2,6 @@
 using IES300.API.Domain.Entities;
 using IES300.API.Domain.Interfaces.Repositories;
 using IES300.API.Domain.Interfaces.Services;
-using IES300.API.Repository.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,13 +12,10 @@ namespace IES300.API.Services.Services
     {
         private readonly ITemaRepository _temaRepository;
         private readonly IFichaRepository _fichaRepository;
-        private readonly IPatrocinadorRepository _patrociadorRepository;
 
         public TemaService(ITemaRepository temaRepository, IFichaRepository fichaRepository)
-        public TemaService(ITemaRepository temaRepository, IPatrocinadorRepository patrocinadorRepository)
         {
             _temaRepository = temaRepository;
-            _patrociadorRepository = patrocinadorRepository;
             _fichaRepository = fichaRepository;
         }
 
@@ -97,12 +93,10 @@ namespace IES300.API.Services.Services
             if (id < 1)
                 throw new ArgumentException($"Id: {id} está inválido");
 
-            var tema = _temaRepository.ObterPorId(id);
+            var tema = _temaRepository.ObterTemaPorIdComPatrocinador(id);
 
             if (tema == null || !tema.Ativado)
                 throw new KeyNotFoundException($"Tema com Id: {id} não encontrado");
-
-            var patrocinador = _patrociadorRepository.ObterPorId(tema.IdPatrocinador);
 
             return new TemaOutputDTO()
             {
@@ -111,8 +105,7 @@ namespace IES300.API.Services.Services
                 UrlTabuleiro = tema.UrlTabuleiro,
                 IdPatrocinador = tema.IdPatrocinador,
                 Ativado = tema.Ativado,
-                NomePatrocinador = patrocinador.Nome           
-                
+                NomePatrocinador = tema.Patrocinador.Nome
             };
 
         }
