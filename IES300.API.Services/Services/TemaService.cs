@@ -40,7 +40,8 @@ namespace IES300.API.Services.Services
                 Id = tema.Id,
                 IdPatrocinador = tema.IdPatrocinador,
                 Nome = tema.Nome,
-                UrlTabuleiro = tema.UrlTabuleiro
+                UrlTabuleiro = tema.UrlTabuleiro,
+                NomePatrocinador = temaOutput.NomePatrocinador
             };
         }
 

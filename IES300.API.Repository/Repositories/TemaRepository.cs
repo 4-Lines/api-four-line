@@ -11,9 +11,13 @@ namespace IES300.API.Repository.Repositories
     {
         public TemaRepository(ApiDbContext context) : base(context) { }
 
-        public Tema ObterTemaPorIdComPatrocinador(int id)
+        public Tema ObterTemaPorIdComPatrocinador(int id, bool asNoTracking = true)
         {
-            return _dbSet.Include(x => x.Patrocinador).FirstOrDefault(x => x.Id == id);
+            IQueryable<Tema> query = _dbSet;
+            if (asNoTracking)
+                query = query.AsNoTracking();
+
+            return query.Include(x => x.Patrocinador).FirstOrDefault(x => x.Id == id);
         }
 
         public List<Tema> ObterTodosTemasComPatrocinador()

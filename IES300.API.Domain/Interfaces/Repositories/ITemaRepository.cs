@@ -7,6 +7,6 @@ namespace IES300.API.Domain.Interfaces.Repositories
     public interface ITemaRepository : IRepositoryBase<Tema>
     {
         List<Tema> ObterTodosTemasComPatrocinador();
-        Tema ObterTemaPorIdComPatrocinador(int id);
+        Tema ObterTemaPorIdComPatrocinador(int id, bool asNoTracking = true);
     }
 }
