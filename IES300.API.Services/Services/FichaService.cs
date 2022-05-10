@@ -102,7 +102,8 @@ namespace IES300.API.Services.Services
                 Nome = ficha.Nome,
                 UrlFicha = ficha.UrlFicha,
                 IdTema = ficha.IdTema,
-                Ativado = ficha.Ativado
+                Ativado = ficha.Ativado,
+                NomeTema = fichaOutput.NomeTema
             };
         }
 

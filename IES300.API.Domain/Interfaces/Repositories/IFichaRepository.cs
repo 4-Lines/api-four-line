@@ -6,7 +6,7 @@ namespace IES300.API.Domain.Interfaces.Repositories
     public interface IFichaRepository : IRepositoryBase<Ficha>
     {
         List<Ficha> ObterTodasFichasComTema();
-        Ficha ObterFichaPorIdComTema(int id);
+        Ficha ObterFichaPorIdComTema(int id, bool asNoTracking = true);
         List<Ficha> ObterFichasPorIdTema(int idTema);
     }
 }
