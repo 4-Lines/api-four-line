@@ -12,11 +12,13 @@ namespace IES300.API.Services.Services
     {
         private readonly IPatrocinadorRepository _patrocinadorRepository;
         private readonly ITemaRepository _temaRepository;
+        private readonly ITemaService _temaService;
 
-        public PatrocinadorService(IPatrocinadorRepository patrocinadorRepository, ITemaRepository temaRepository)
+        public PatrocinadorService(IPatrocinadorRepository patrocinadorRepository, ITemaRepository temaRepository, ITemaService temaService)
         {
             _patrocinadorRepository = patrocinadorRepository;
             _temaRepository = temaRepository;
+            _temaService = temaService;
         }
 
         public PatrocinadorOutputDTO InserirPatrocinador(PatrocinadorInsertDTO patrocinadorInsert)
@@ -135,7 +137,7 @@ namespace IES300.API.Services.Services
 
             foreach (var tema in patrocinadorTemas)
             {
-                _temaRepository.Deletar(tema.Id);
+                _temaService.DeletarTema(tema.Id);
             }
         }
 
