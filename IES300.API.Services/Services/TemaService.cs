@@ -76,7 +76,7 @@ namespace IES300.API.Services.Services
             _temaRepository.Inserir(tema);
 
             if (tema.Id == 0)
-                throw new NullReferenceException("Falha ao inserir Patrocinador");
+                throw new NullReferenceException("Falha ao inserir Tema");
 
             return new TemaOutputDTO()
             {
@@ -90,7 +90,6 @@ namespace IES300.API.Services.Services
 
         public TemaOutputDTO ObterTemaPorId(int id)
         {
-
             if (id < 1)
                 throw new ArgumentException($"Id: {id} está inválido");
 
@@ -108,7 +107,6 @@ namespace IES300.API.Services.Services
                 Ativado = tema.Ativado,
                 NomePatrocinador = tema.Patrocinador.Nome
             };
-
         }
 
         public List<TemaOutputDTO> ObterTodosTemas(bool ativado)
