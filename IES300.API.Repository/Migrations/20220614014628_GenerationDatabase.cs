@@ -2,7 +2,7 @@
 
 namespace IES300.API.Repository.Migrations
 {
-    public partial class SubindoEntidades : Migration
+    public partial class GenerationDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,6 +22,26 @@ namespace IES300.API.Repository.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Patrocinador", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NomeUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumeroPartidas = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    NumeroVitorias = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    NumeroDerrotas = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    NumeroEmpates = table.Column<int>(type: "int", nullable: false),
+                    Ativado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuario", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,6 +88,11 @@ namespace IES300.API.Repository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Usuario",
+                columns: new[] { "Id", "Ativado", "Email", "NomeUsuario", "NumeroEmpates", "Senha" },
+                values: new object[] { 1, true, "admin@fourline.com", "Admin", 0, "e10adc3949ba59abbe56e057f20f883e" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Ficha_IdTema",
                 table: "Ficha",
@@ -84,12 +109,22 @@ namespace IES300.API.Repository.Migrations
                 name: "IX_Tema_IdPatrocinador",
                 table: "Tema",
                 column: "IdPatrocinador");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuario_Email",
+                table: "Usuario",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Ficha");
+
+            migrationBuilder.DropTable(
+                name: "Usuario");
 
             migrationBuilder.DropTable(
                 name: "Tema");
