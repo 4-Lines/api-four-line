@@ -1,3 +1,4 @@
+using IES300.API.Application.Hub;
 using IES300.API.Domain.Interfaces.Repositories;
 using IES300.API.Domain.Interfaces.Services;
 using IES300.API.Repository;
@@ -42,7 +43,7 @@ namespace IES300.API.Application
             services.AddSignalR();
 
             services.AddDbContext<ApiDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) //ServerOnline
             );
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
@@ -80,11 +81,10 @@ namespace IES300.API.Application
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
-            //app.MapHub<MyHub>("/chat");
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<Jogo>("/jogo");
             });
         }
     }

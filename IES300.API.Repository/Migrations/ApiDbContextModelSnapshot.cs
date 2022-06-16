@@ -112,6 +112,68 @@ namespace IES300.API.Repository.Migrations
                     b.ToTable("Tema");
                 });
 
+            modelBuilder.Entity("IES300.API.Domain.Entities.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Ativado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("NomeUsuario")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumeroDerrotas")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("NumeroEmpates")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumeroPartidas")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<int>("NumeroVitorias")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
+                    b.ToTable("Usuario");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Ativado = true,
+                            Email = "admin@fourline.com",
+                            NomeUsuario = "Admin",
+                            NumeroDerrotas = 0,
+                            NumeroEmpates = 0,
+                            NumeroPartidas = 0,
+                            NumeroVitorias = 0,
+                            Senha = "e10adc3949ba59abbe56e057f20f883e"
+                        });
+                });
+
             modelBuilder.Entity("IES300.API.Domain.Entities.Ficha", b =>
                 {
                     b.HasOne("IES300.API.Domain.Entities.Tema", "Tema")
