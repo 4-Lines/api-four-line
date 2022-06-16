@@ -77,9 +77,10 @@ namespace IES300.API.Application
             app.UseAuthentication();
 
             app.UseCors(x => x
-                .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials());
 
             app.UseEndpoints(endpoints =>
             {
