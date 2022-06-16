@@ -1,4 +1,5 @@
 ﻿using IES300.API.Domain.Entities.Jogo;
+using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 
 namespace IES300.API.Application.Hub
@@ -13,19 +14,31 @@ namespace IES300.API.Application.Hub
                 _salaEspera = new List<Jogador>();
         }
 
-        public void ProcurarPartida(string nickName, string connectionId)
+        public async void setCampos(int[] campos, int player, int X, int Y, string connnectId)
         {
-            // ver se usa classe ou método Group
+            await Clients.All.SendAsync("setCampos");
         }
 
-        public void MoverPeca(DadosPartida dadosPartida)
+        public async void getCampos(int x, int y)
         {
-            // atualizar dados da partida
+            x = 6;
+            y = 7;
+            //for (int i = 0; i < (altura * largura); i++)
+            //{
+            //    campos[i] = 0;
+            //}
+            await Clients.All.SendAsync("getCampos", x, y);
         }
 
-        public void DesistirPartida(string connectionId)
-        {
-            // retirar jogador da classe ou do método Group e encerrar partida
-        }
+        //public void DesistirPartida(string connectionId)
+        //{
+        //    // retirar jogador da classe ou do método Group e encerrar partida
+        //}
+
+        //public async void Test(string text)
+        //{
+        //    text = text + " passou no back";
+        //    await Clients.All.SendAsync("test", text);
+        //}
     }
 }
