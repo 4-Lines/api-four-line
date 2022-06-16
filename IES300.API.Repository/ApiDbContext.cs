@@ -16,7 +16,7 @@ namespace IES300.API.Repository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=Fabiano;Database=quatroemlinha;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=CPX-3STNHAQ4C8C;Database=quatroemlinha;Trusted_Connection=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
