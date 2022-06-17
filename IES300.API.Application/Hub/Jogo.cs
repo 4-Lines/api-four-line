@@ -1,6 +1,7 @@
 ﻿using IES300.API.Domain.Entities.Jogo;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace IES300.API.Application.Hub
 {
@@ -19,15 +20,9 @@ namespace IES300.API.Application.Hub
             await Clients.All.SendAsync("setCampos");
         }
 
-        public async void getCampos(int x, int y)
-        {
-            x = 6;
-            y = 7;
-            //for (int i = 0; i < (altura * largura); i++)
-            //{
-            //    campos[i] = 0;
-            //}
-            await Clients.All.SendAsync("getCampos", x, y);
+        public async Task DistribuiArray(int[] campos, int ultimo, int player, string connectId)
+        { 
+            await Clients.All.SendAsync("DistribuiArray", campos, ultimo, player,connectId);
         }
 
         //public void DesistirPartida(string connectionId)
