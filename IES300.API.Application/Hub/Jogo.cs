@@ -51,34 +51,39 @@ namespace IES300.API.Application.Hub
             }
         }
 
-        public async Task DistribuiArray(int[] campos, int ultimo, int player, int x, int y, string connectId, int encerrada)
+        public async Task DistribuiArray(int[] campos, int ultimo, int player, int? x, int? y, string connectId, int encerrada)
         {
-            if (this.PartidaEncerrada(player, x, y, campos))
-                encerrada = player;
+            if (x != null && y != null)
+                encerrada = VerificaVitoria(player, x, y, campos);
             else
                 encerrada = 0;
 
             var sala = _salaJogo.Find(x => x.Jogador1.IdJogador == connectId || x.Jogador2.IdJogador == connectId);
-            await Clients.Client(sala.Jogador1.IdJogador).SendAsync("DistribuiArray", campos, ultimo, player, x, y, connectId, encerrada);
-            await Clients.Client(sala.Jogador2.IdJogador).SendAsync("DistribuiArray", campos, ultimo, player, x, y, connectId, encerrada);
+            await Clients.Client(sala.Jogador1.IdJogador).SendAsync("DistribuiArray", campos, ultimo, player, connectId, encerrada);
+            await Clients.Client(sala.Jogador2.IdJogador).SendAsync("DistribuiArray", campos, ultimo, player, connectId, encerrada);
         }
 
-        private bool PartidaEncerrada(int player, int x, int y, int[] campos)
+        private int VerificaVitoria(int player, int? x, int? y, int[] campos)
         {
-            if (this.verificaLargura(campos, player, y) ||
-                this.verificaAltura(campos, player, x) ||
-                this.verificaDiagonalPrimaria(campos, player, x, y) ||
-                this.verificaDiagonalSecundaria(campos, player, x, y) ||
-                this.VerificaEmpate(campos))
-                return true;
+            player = player == 1 ? 2 : 1;
+            if (verificaLargura(campos, player, (int)y) ||
+                verificaAltura(campos, player, (int)x) ||
+                verificaDiagonalPrimaria(campos, player, (int)x, (int)y) ||
+                verificaDiagonalSecundaria(campos, player, (int)x, (int)y))
+                return player; //vencedor
             else
-                return false;
+            {
+                if (VerificaEmpate(campos))
+                    return 3; //empate
+                else
+                    return 0; //nada
+            }
         }
 
         private bool verificaLargura(int[] campos, int player, int y)
         {
             int contador = 0;
-            for (int i = (y * largura); i < (y * (largura + largura)); i++)
+            for (int i = (y * largura); i < (y * largura + largura); i++)
             {
                 if (campos[i] == player)
                     contador++;
