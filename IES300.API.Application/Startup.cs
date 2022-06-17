@@ -43,7 +43,7 @@ namespace IES300.API.Application
             services.AddSignalR();
 
             services.AddDbContext<ApiDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) //ServerOnline
+                options.UseSqlServer(Configuration.GetConnectionString("ServerOnline"))
             );
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
