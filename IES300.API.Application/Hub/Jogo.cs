@@ -15,9 +15,9 @@ namespace IES300.API.Application.Hub
                 _salaEspera = new List<Jogador>();
         }
 
-        public async void setCampos(int[] campos, int player, int X, int Y, string connnectId)
+        public async void setCampos(int[] campos, int ultimoDaAltura, int player)
         {
-            await Clients.All.SendAsync("setCampos");
+            await Clients.All.SendAsync("setCampos", campos, ultimoDaAltura, player);
         }
 
         public async Task DistribuiArray(int[] campos, int ultimo, int player, string connectId)
@@ -30,10 +30,10 @@ namespace IES300.API.Application.Hub
         //    // retirar jogador da classe ou do método Group e encerrar partida
         //}
 
-        //public async void Test(string text)
-        //{
-        //    text = text + " passou no back";
-        //    await Clients.All.SendAsync("test", text);
-        //}
+        public async void Test(string text)
+        {
+            text = text + " passou no back ";
+            await Clients.All.SendAsync("test", text);
+        }
     }
 }

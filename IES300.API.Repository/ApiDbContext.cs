@@ -18,7 +18,7 @@ namespace IES300.API.Repository
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=Fabiano;Database=quatroemlinha;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(@"Server=CPX-3STNHAQ4C8C;Database=quatroemlinha;Trusted_Connection=True;");
                 //@"Server=tcp:fourline.database.windows.net,1433;Initial Catalog=quatroemlinhaDB;Persist Security Info=False;User ID=fourlineadmin;Password=Ies300@fatec;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
 
