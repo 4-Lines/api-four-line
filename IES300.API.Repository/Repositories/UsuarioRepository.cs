@@ -16,9 +16,14 @@ namespace IES300.API.Repository.Repositories
             return _dbSet.Where(x => x.Id != id).Any(x => x.Email.ToUpper() == email.ToUpper());
         }
 
-        public bool UsuarioExistente(string nomeUsuario, string senha)
+        public string ObterSenhaEncriptadaPeloId(int id)
         {
-            return _dbSet.FirstOrDefault(x => x.NomeUsuario == nomeUsuario && x.Senha == senha) == null;
+            return _dbSet.Where(x => x.Id == id).Select(x => x.Senha).FirstOrDefault();
+        }
+
+        public Usuario UsuarioExistente(string nomeUsuario, string senha)
+        {
+            return _dbSet.Where(x => x.NomeUsuario == nomeUsuario && x.Senha == senha && x.Ativado == true).FirstOrDefault();
         }
     }
 }

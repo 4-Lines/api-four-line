@@ -10,6 +10,6 @@ namespace IES300.API.Domain.Interfaces.Services
         UsuarioOutputDTO ObterUsuarioPorId(int id);
         void DeletarUsuario(int id);
         UsuarioOutputDTO AlterarUsuario(UsuarioUpdateDTO usuarioInput);
-        void ValidarUsuario(UsuarioValidateDTO usuarioInput);
+        UsuarioOutputDTO ValidarUsuario(UsuarioValidateDTO usuarioInput);
     }
 }

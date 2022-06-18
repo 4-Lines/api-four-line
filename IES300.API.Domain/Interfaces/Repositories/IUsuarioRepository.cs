@@ -8,6 +8,8 @@ namespace IES300.API.Domain.Interfaces.Repositories
     {
         bool EmailExistenteDeUsuario(string email, int id);
 
-        bool UsuarioExistente(string nomeUsuario, string senha);
+        Usuario UsuarioExistente(string nomeUsuario, string senha);
+
+        string ObterSenhaEncriptadaPeloId(int id);
     }
 }

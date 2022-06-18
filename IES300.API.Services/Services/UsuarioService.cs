@@ -28,10 +28,10 @@ namespace IES300.API.Services.Services
                 Email = UsuarioInput.Email,
                 Senha = Criptografia.getMDIHash(UsuarioInput.Senha),
                 Ativado = true,
-                //NumeroPartidas = 1,
-                //NumeroVitorias = 2,
-                //NumeroDerrotas = 3,
-                NumeroEmpates = 4
+                NumeroPartidas = 0,
+                NumeroVitorias = 0,
+                NumeroDerrotas = 0,
+                NumeroEmpates = 0
             };
 
             _usuarioRepository.Inserir(usuario);
@@ -44,7 +44,6 @@ namespace IES300.API.Services.Services
                 Id = usuario.Id,
                 NomeUsuario = usuario.NomeUsuario,
                 Email = usuario.Email,
-                Senha = usuario.Senha,
                 Ativado = usuario.Ativado,
                 NumeroPartidas = usuario.NumeroPartidas,
                 NumeroVitorias = usuario.NumeroVitorias,
@@ -64,7 +63,6 @@ namespace IES300.API.Services.Services
                     Id = x.Id,
                     NomeUsuario = x.NomeUsuario,
                     Email = x.Email,
-                    Senha = x.Senha,
                     Ativado = x.Ativado,
                     NumeroPartidas = x.NumeroPartidas,
                     NumeroVitorias = x.NumeroVitorias,
@@ -89,7 +87,6 @@ namespace IES300.API.Services.Services
                 Id = usuario.Id,
                 NomeUsuario = usuario.NomeUsuario,
                 Email = usuario.Email,
-                Senha = usuario.Senha,
                 Ativado = usuario.Ativado,
                 NumeroPartidas = usuario.NumeroPartidas,
                 NumeroVitorias = usuario.NumeroVitorias,
@@ -108,13 +105,17 @@ namespace IES300.API.Services.Services
                 Id = usuarioUpdate.Id,
                 NomeUsuario = usuarioUpdate.NomeUsuario,
                 Email = usuarioUpdate.Email,
-                Senha = Criptografia.getMDIHash(usuarioUpdate.Senha),
                 Ativado = usuarioOutput.Ativado,
                 NumeroPartidas = usuarioOutput.NumeroPartidas,
                 NumeroVitorias = usuarioOutput.NumeroVitorias,
                 NumeroDerrotas = usuarioOutput.NumeroDerrotas,
                 NumeroEmpates = usuarioOutput.NumeroEmpates
             };
+
+            if (string.IsNullOrEmpty(usuarioUpdate.Senha))
+                usuario.Senha = _usuarioRepository.ObterSenhaEncriptadaPeloId(usuarioUpdate.Id);
+            else
+                usuario.Senha = Criptografia.getMDIHash(usuarioUpdate.Senha);
 
             _usuarioRepository.Alterar(usuario);
 
@@ -123,7 +124,6 @@ namespace IES300.API.Services.Services
                 Id = usuario.Id,
                 NomeUsuario = usuario.NomeUsuario,
                 Email = usuario.Email,
-                Senha = usuario.Senha,
                 Ativado = usuario.Ativado,
                 NumeroPartidas = usuario.NumeroPartidas,
                 NumeroVitorias = usuario.NumeroVitorias,
@@ -137,7 +137,8 @@ namespace IES300.API.Services.Services
             if (id < 1)
                 throw new ArgumentException($"Id: {id} está inválido");
 
-            var retorno = _usuarioRepository.Deletar(id);
+            if (!_usuarioRepository.Deletar(id))
+                throw new KeyNotFoundException($"Id: {id} não encontrado");
         }
 
         private void ExisteEmailIgual(string email, int id = 0)
@@ -148,15 +149,24 @@ namespace IES300.API.Services.Services
                 throw new ArgumentException($"Email: {email} já existe");
         }
 
-        public void ValidarUsuario(UsuarioValidateDTO usuarioInput)
+        public UsuarioOutputDTO ValidarUsuario(UsuarioValidateDTO usuarioInput)
         {
-            var nomeUsuario = usuarioInput.NomeUsuario;
-            var senha = Criptografia.getMDIHash(usuarioInput.Senha);
+            var usuario = _usuarioRepository.UsuarioExistente(usuarioInput.NomeUsuario, Criptografia.getMDIHash(usuarioInput.Senha));
 
-            var retorno = _usuarioRepository.UsuarioExistente(nomeUsuario, senha);
+            if (usuario == null)
+                throw new UnauthorizedAccessException($"Acesso inválido");
 
-            if (retorno)
-                throw new ArgumentException($"NomeUsuario e/ou Senha incorretos");
+            return new UsuarioOutputDTO()
+            {
+                Id = usuario.Id,
+                NomeUsuario = usuario.NomeUsuario,
+                Email = usuario.Email,
+                Ativado = usuario.Ativado,
+                NumeroPartidas = usuario.NumeroPartidas,
+                NumeroVitorias = usuario.NumeroVitorias,
+                NumeroDerrotas = usuario.NumeroDerrotas,
+                NumeroEmpates = usuario.NumeroEmpates
+            };
         }
     }
 }

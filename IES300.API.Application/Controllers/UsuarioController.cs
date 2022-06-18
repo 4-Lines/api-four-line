@@ -133,20 +133,20 @@ namespace IES300.API.Application.Controllers
 
         [HttpPost]
         [Route("Validacao")]
-        public IActionResult ValidarUsuario([FromBody] UsuarioValidateDTO usuario)
+        public IActionResult ValidarUsuario([FromBody] UsuarioValidateDTO usuarioValidate)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest();
 
-                _usuarioService.ValidarUsuario(usuario);
+                var usuario = _usuarioService.ValidarUsuario(usuarioValidate);
 
-                return Ok(new { message = $"NomeUsuario e Senha válidos" });
+                return Ok(usuario);
             }
-            catch (NullReferenceException ex)
+            catch (UnauthorizedAccessException ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return Unauthorized(new { message = ex.Message });
             }
             catch (Exception ex)
             {

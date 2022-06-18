@@ -7,8 +7,6 @@
 
         public string Email { get; set; }
 
-        public string Senha { get; set; }
-
         public bool Ativado { get; set; }
 
         public int NumeroPartidas { get; set; }
