@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using IES300.API.Domain.Utils;
+using IES300.API.Domain.Enum;
 
 namespace IES300.API.Services.Services
 {
@@ -31,7 +32,8 @@ namespace IES300.API.Services.Services
                 NumeroPartidas = 0,
                 NumeroVitorias = 0,
                 NumeroDerrotas = 0,
-                NumeroEmpates = 0
+                NumeroEmpates = 0,
+                TipoUsuario = ETipoUsuario.Jogador
             };
 
             _usuarioRepository.Inserir(usuario);
@@ -48,7 +50,8 @@ namespace IES300.API.Services.Services
                 NumeroPartidas = usuario.NumeroPartidas,
                 NumeroVitorias = usuario.NumeroVitorias,
                 NumeroDerrotas = usuario.NumeroDerrotas,
-                NumeroEmpates = usuario.NumeroEmpates
+                NumeroEmpates = usuario.NumeroEmpates,
+                TipoUsuario = usuario.TipoUsuario
             };
         }
 
@@ -67,7 +70,8 @@ namespace IES300.API.Services.Services
                     NumeroPartidas = x.NumeroPartidas,
                     NumeroVitorias = x.NumeroVitorias,
                     NumeroDerrotas = x.NumeroDerrotas,
-                    NumeroEmpates = x.NumeroEmpates
+                    NumeroEmpates = x.NumeroEmpates,
+                    TipoUsuario = x.TipoUsuario
                 };
             }).ToList();
         }
@@ -91,7 +95,8 @@ namespace IES300.API.Services.Services
                 NumeroPartidas = usuario.NumeroPartidas,
                 NumeroVitorias = usuario.NumeroVitorias,
                 NumeroDerrotas = usuario.NumeroDerrotas,
-                NumeroEmpates = usuario.NumeroEmpates
+                NumeroEmpates = usuario.NumeroEmpates,
+                TipoUsuario = usuario.TipoUsuario
             };
         }
 
@@ -109,7 +114,8 @@ namespace IES300.API.Services.Services
                 NumeroPartidas = usuarioOutput.NumeroPartidas,
                 NumeroVitorias = usuarioOutput.NumeroVitorias,
                 NumeroDerrotas = usuarioOutput.NumeroDerrotas,
-                NumeroEmpates = usuarioOutput.NumeroEmpates
+                NumeroEmpates = usuarioOutput.NumeroEmpates,
+                TipoUsuario = usuarioOutput.TipoUsuario
             };
 
             if (string.IsNullOrEmpty(usuarioUpdate.Senha))
@@ -128,7 +134,8 @@ namespace IES300.API.Services.Services
                 NumeroPartidas = usuario.NumeroPartidas,
                 NumeroVitorias = usuario.NumeroVitorias,
                 NumeroDerrotas = usuario.NumeroDerrotas,
-                NumeroEmpates = usuario.NumeroEmpates
+                NumeroEmpates = usuario.NumeroEmpates,
+                TipoUsuario = usuario.TipoUsuario
             };
         }
 
@@ -165,7 +172,8 @@ namespace IES300.API.Services.Services
                 NumeroPartidas = usuario.NumeroPartidas,
                 NumeroVitorias = usuario.NumeroVitorias,
                 NumeroDerrotas = usuario.NumeroDerrotas,
-                NumeroEmpates = usuario.NumeroEmpates
+                NumeroEmpates = usuario.NumeroEmpates,
+                TipoUsuario = usuario.TipoUsuario
             };
         }
     }

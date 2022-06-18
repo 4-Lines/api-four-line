@@ -18,6 +18,7 @@ namespace IES300.API.Repository.Mapping
             builder.Property(x => x.NumeroVitorias).HasDefaultValue(0);
             builder.Property(x => x.NumeroDerrotas).HasDefaultValue(0);
             builder.Property(x => x.NumeroEmpates).HasDefaultValue(0);
+            builder.Property(x => x.TipoUsuario).IsRequired();
         }
     }
 }

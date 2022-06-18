@@ -1,4 +1,6 @@
-﻿namespace IES300.API.Domain.DTOs.Usuario
+﻿using IES300.API.Domain.Enum;
+
+namespace IES300.API.Domain.DTOs.Usuario
 {
     public class UsuarioOutputDTO
     {
@@ -16,5 +18,7 @@
         public int NumeroDerrotas { get; set; }
 
         public int NumeroEmpates { get; set; }
+
+        public ETipoUsuario TipoUsuario { get; set; }
     }
 }
