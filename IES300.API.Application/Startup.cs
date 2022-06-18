@@ -43,7 +43,7 @@ namespace IES300.API.Application
             services.AddSignalR();
 
             services.AddDbContext<ApiDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("ServerOnline"))
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
 
             services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
@@ -79,9 +79,10 @@ namespace IES300.API.Application
             app.UseAuthentication();
 
             app.UseCors(x => x
-                .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader());
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true)
+                .AllowCredentials());
 
             app.UseEndpoints(endpoints =>
             {
