@@ -1,6 +1,7 @@
 ﻿using IES300.API.Domain.Entities.Jogo;
 using IES300.API.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,14 +14,16 @@ namespace IES300.API.Application.Hub
         public static List<SalaPartida> _salaJogo;
 
         private readonly IPatrocinadorService _patrocinadorService;
+        private readonly IUsuarioService _usuarioService;
 
         int largura = 7;
         int altura = 6;
         int tabuleiro = 42;
 
-        public Jogo(IPatrocinadorService patrocinadorService)
+        public Jogo(IPatrocinadorService patrocinadorService, IUsuarioService usuarioService)
         {
             _patrocinadorService = patrocinadorService;
+            _usuarioService = usuarioService;
 
             if (_salaEspera == null)
                 _salaEspera = new List<Jogador>();
@@ -33,7 +36,7 @@ namespace IES300.API.Application.Hub
             await Clients.All.SendAsync("setCampos", campos, ultimoDaAltura, player);
         }
 
-        public async void ConectarSala(string connectionId, string name)
+        public async void ConectarSala(string connectionId, string name, string idUsuario)
         {
             var salasVazias = _salaJogo.FindAll(x => x.Jogador1.IdJogador == "" && x.Jogador2.IdJogador == "");
             foreach (var salaRemove in salasVazias)
@@ -48,6 +51,7 @@ namespace IES300.API.Application.Hub
                 {
                     sala.Jogador2.IdJogador = connectionId;
                     sala.Jogador2.NickName = name;
+                    sala.Jogador2.IdUsuario = Convert.ToInt32(idUsuario);
                     await Clients.Client(sala.Jogador1.IdJogador).SendAsync("InicioPartida", "Jogo Iniciado");
                     await Clients.Client(sala.Jogador2.IdJogador).SendAsync("InicioPartida", "Jogo Iniciado");
                 }
@@ -57,8 +61,8 @@ namespace IES300.API.Application.Hub
                 _salaJogo.Add(new SalaPartida
                 {
                     IdSala = _salaJogo.Count,
-                    Jogador1 = new Jogador { IdJogador = connectionId, NickName = name },
-                    Jogador2 = new Jogador { IdJogador = "", NickName = "" },
+                    Jogador1 = new Jogador { IdJogador = connectionId, NickName = name, IdUsuario = Convert.ToInt32(idUsuario) },
+                    Jogador2 = new Jogador { IdJogador = "", NickName = "", IdUsuario = 0 },
                     DadosPatrocinador = _patrocinadorService.ObterPatrocinadorComFichaseTemaAleatorio()
                 });
             }
@@ -97,9 +101,15 @@ namespace IES300.API.Application.Hub
             if (sala.Jogador1 != null && sala.Jogador2 != null) // sala com duas pessoas
             {
                 if (sala.Jogador1.IdJogador == connectionId)
+                {
+                    _usuarioService.ContabilizarResultadoPartida(sala.Jogador2.IdUsuario, sala.Jogador1.IdUsuario);
                     await Clients.Client(sala.Jogador2.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+                } 
                 else
+                {
+                    _usuarioService.ContabilizarResultadoPartida(sala.Jogador1.IdUsuario, sala.Jogador2.IdUsuario);
                     await Clients.Client(sala.Jogador1.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+                }
             }
 
             if(sala != null)
@@ -108,12 +118,30 @@ namespace IES300.API.Application.Hub
 
         public async Task DistribuiArray(int[] campos, int ultimo, int player, int? x, int? y, string connectId, int encerrada)
         {
+            var sala = _salaJogo.Find(x => x.Jogador1.IdJogador == connectId || x.Jogador2.IdJogador == connectId);
+
             if (x != null && y != null)
+            {
                 encerrada = VerificaVitoria(player, x, y, campos);
+                if(encerrada != 0)
+                {
+                    if (encerrada != 3)
+                    {
+                        var jogadorGanhador = (Jogador)sala.GetType().GetProperty("Jogador" + (encerrada == 1 ? 2 : 1)).GetValue(sala);
+                        var jogadorPerdedor = (Jogador)sala.GetType().GetProperty("Jogador" + encerrada).GetValue(sala);
+                        _usuarioService.ContabilizarResultadoPartida(jogadorGanhador.IdUsuario, jogadorPerdedor.IdUsuario);
+                    }
+                    else
+                    {
+                        var jogador1 = (Jogador)sala.GetType().GetProperty("Jogador1").GetValue(sala);
+                        var jogador2 = (Jogador)sala.GetType().GetProperty("Jogador2").GetValue(sala);
+                        _usuarioService.ContabilizarResultadoPartidaEmpate(jogador1.IdUsuario, jogador2.IdUsuario);
+                    }
+                }
+            }
             else
                 encerrada = 0;
 
-            var sala = _salaJogo.Find(x => x.Jogador1.IdJogador == connectId || x.Jogador2.IdJogador == connectId);
             await Clients.Client(sala.Jogador1.IdJogador).SendAsync("DistribuiArray", campos, ultimo, player, connectId, encerrada);
             await Clients.Client(sala.Jogador2.IdJogador).SendAsync("DistribuiArray", campos, ultimo, player, connectId, encerrada);
         }

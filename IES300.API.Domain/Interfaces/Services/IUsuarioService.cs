@@ -11,5 +11,7 @@ namespace IES300.API.Domain.Interfaces.Services
         void DeletarUsuario(int id);
         UsuarioOutputDTO AlterarUsuario(UsuarioUpdateDTO usuarioInput);
         UsuarioOutputDTO ValidarUsuario(UsuarioValidateDTO usuarioInput);
+        void ContabilizarResultadoPartida(int idUsuarioGanhador, int idUsuarioPerdedor);
+        void ContabilizarResultadoPartidaEmpate(int idUsuario1, int idUsuario2);
     }
 }

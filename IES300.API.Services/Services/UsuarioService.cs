@@ -176,5 +176,31 @@ namespace IES300.API.Services.Services
                 TipoUsuario = usuario.TipoUsuario
             };
         }
+
+        public void ContabilizarResultadoPartida(int idUsuarioGanhador, int idUsuarioPerdedor)
+        {
+            var usuarioGanhador = _usuarioRepository.ObterPorId(idUsuarioGanhador);
+            usuarioGanhador.NumeroPartidas++;
+            usuarioGanhador.NumeroVitorias++;
+            _usuarioRepository.Alterar(usuarioGanhador);
+
+            var usuarioPerdedor = _usuarioRepository.ObterPorId(idUsuarioPerdedor);
+            usuarioPerdedor.NumeroPartidas++;
+            usuarioPerdedor.NumeroDerrotas++;
+            _usuarioRepository.Alterar(usuarioPerdedor);
+        }
+
+        public void ContabilizarResultadoPartidaEmpate(int idUsuario1, int idUsuario2)
+        {
+            var usuario1 = _usuarioRepository.ObterPorId(idUsuario1);
+            usuario1.NumeroPartidas++;
+            usuario1.NumeroEmpates++;
+            _usuarioRepository.Alterar(usuario1);
+
+            var usuario2 = _usuarioRepository.ObterPorId(idUsuario2);
+            usuario2.NumeroPartidas++;
+            usuario2.NumeroEmpates++;
+            _usuarioRepository.Alterar(usuario2);
+        }
     }
 }

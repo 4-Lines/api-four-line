@@ -5,5 +5,7 @@
         public string IdJogador { get; set; }
 
         public string NickName { get; set; }
+
+        public int IdUsuario { get; set; }
     }
 }
