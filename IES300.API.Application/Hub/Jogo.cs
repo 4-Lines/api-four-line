@@ -65,8 +65,23 @@ namespace IES300.API.Application.Hub
 
             if (sala != null)
             {
-                await Clients.Client(sala.Jogador1.IdJogador).SendAsync("obterDadosPartida", sala.Jogador1, sala.Jogador2, sala.DadosPatrocinador);
-                await Clients.Client(sala.Jogador2.IdJogador).SendAsync("obterDadosPartida", sala.Jogador1, sala.Jogador2, sala.DadosPatrocinador);
+                if(sala.Jogador1.IdJogador == connectionId)
+                    await Clients.Client(sala.Jogador1.IdJogador).SendAsync("obterDadosPartida", sala.Jogador1, sala.Jogador2, sala.DadosPatrocinador);
+                else
+                    await Clients.Client(sala.Jogador2.IdJogador).SendAsync("obterDadosPartida", sala.Jogador1, sala.Jogador2, sala.DadosPatrocinador);
+            }
+        }
+
+        public void ConsertaConnectionId(string connectionIdNew, string connectionIdOld)
+        {
+            var sala = _salaJogo.Find(x => x.Jogador1.IdJogador == connectionIdOld || x.Jogador2.IdJogador == connectionIdOld);
+
+            if (sala != null)
+            {
+                if(sala.Jogador1.IdJogador == connectionIdOld)
+                    sala.Jogador1.IdJogador = connectionIdNew;
+                else
+                    sala.Jogador2.IdJogador = connectionIdNew;
             }
         }
 
@@ -82,7 +97,8 @@ namespace IES300.API.Application.Hub
                     await Clients.Client(sala.Jogador1.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
             }
 
-            _salaJogo.Remove(sala); // apaga a sala para evitar bug com validar sala == null
+            if(sala != null)
+                _salaJogo.Remove(sala); // apaga a sala para evitar bug com validar sala == null
         }
 
         public async Task DistribuiArray(int[] campos, int ultimo, int player, int? x, int? y, string connectId, int encerrada)
