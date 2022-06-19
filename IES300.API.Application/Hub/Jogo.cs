@@ -2,6 +2,7 @@
 using IES300.API.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace IES300.API.Application.Hub
@@ -34,6 +35,10 @@ namespace IES300.API.Application.Hub
 
         public async void ConectarSala(string connectionId, string name)
         {
+            var salasVazias = _salaJogo.FindAll(x => x.Jogador1.IdJogador == "" && x.Jogador2.IdJogador == "");
+            foreach (var salaRemove in salasVazias)
+                _salaJogo.Remove(salaRemove);
+
             var sala = _salaJogo.Find(x => x.Jogador1.IdJogador == "" || x.Jogador2.IdJogador == "");
             if (sala != null)
             {
