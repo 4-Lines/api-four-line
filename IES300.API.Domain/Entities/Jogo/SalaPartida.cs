@@ -9,5 +9,7 @@
         public Jogador Jogador2 { get; set; }
 
         public DadosPartida DadosPartida { get; set; }
+
+        public DadosPatrocinador DadosPatrocinador { get; set; }
     }
 }

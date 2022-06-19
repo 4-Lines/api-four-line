@@ -1,4 +1,5 @@
 ﻿using IES300.API.Domain.Entities.Jogo;
+using IES300.API.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,12 +11,16 @@ namespace IES300.API.Application.Hub
         public static List<Jogador> _salaEspera; // vai armazenar uma lista de jogadores para jogar
         public static List<SalaPartida> _salaJogo;
 
+        private readonly IPatrocinadorService _patrocinadorService;
+
         int largura = 7;
         int altura = 6;
         int tabuleiro = 42;
 
-        public Jogo()
+        public Jogo(IPatrocinadorService patrocinadorService)
         {
+            _patrocinadorService = patrocinadorService;
+
             if (_salaEspera == null)
                 _salaEspera = new List<Jogador>();
             if (_salaJogo == null)
@@ -37,7 +42,9 @@ namespace IES300.API.Application.Hub
                 else
                 {
                     sala.Jogador2.IdJogador = connectionId;
-                    await Clients.All.SendAsync("InicioPartida", "Jogo Iniciado");
+                    sala.Jogador2.NickName = name;
+                    await Clients.Client(sala.Jogador1.IdJogador).SendAsync("InicioPartida", "Jogo Iniciado");
+                    await Clients.Client(sala.Jogador2.IdJogador).SendAsync("InicioPartida", "Jogo Iniciado");
                 }
             }
             else
@@ -46,9 +53,36 @@ namespace IES300.API.Application.Hub
                 {
                     IdSala = _salaJogo.Count,
                     Jogador1 = new Jogador { IdJogador = connectionId, NickName = name },
-                    Jogador2 = new Jogador { IdJogador = "", NickName = "" }
+                    Jogador2 = new Jogador { IdJogador = "", NickName = "" },
+                    DadosPatrocinador = _patrocinadorService.ObterPatrocinadorComFichaseTemaAleatorio()
                 });
             }
+        }
+
+        public async void SolicitarDadosPartida(string connectionId)
+        {
+            var sala = _salaJogo.Find(x => x.Jogador1.IdJogador == connectionId || x.Jogador2.IdJogador == connectionId);
+
+            if (sala != null)
+            {
+                await Clients.Client(sala.Jogador1.IdJogador).SendAsync("obterDadosPartida", sala.Jogador1, sala.Jogador2, sala.DadosPatrocinador);
+                await Clients.Client(sala.Jogador2.IdJogador).SendAsync("obterDadosPartida", sala.Jogador1, sala.Jogador2, sala.DadosPatrocinador);
+            }
+        }
+
+        public async void DesconectarSala(string connectionId)
+        {
+            var sala = _salaJogo.Find(x => x.Jogador1.IdJogador == connectionId || x.Jogador2.IdJogador == connectionId);
+            
+            if (sala.Jogador1 != null && sala.Jogador2 != null) // sala com duas pessoas
+            {
+                if (sala.Jogador1.IdJogador == connectionId)
+                    await Clients.Client(sala.Jogador2.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+                else
+                    await Clients.Client(sala.Jogador1.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+            }
+
+            _salaJogo.Remove(sala); // apaga a sala para evitar bug com validar sala == null
         }
 
         public async Task DistribuiArray(int[] campos, int ultimo, int player, int? x, int? y, string connectId, int encerrada)
@@ -199,5 +233,13 @@ namespace IES300.API.Application.Hub
             }
             return true;
         }
+
+        //public void TestObject(Jogador str)
+        //{
+        //    //var obj = JsonSerializer.Deserialize<Jogador>(str); // exemplo de receber string e serializar ela para o objeto
+        //    //var json = JsonSerializer.Serialize(obj);
+
+        //    Clients.All.SendAsync("testObject", str);
+        //}
     }
 }

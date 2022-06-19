@@ -1,5 +1,6 @@
 ﻿using IES300.API.Domain.DTOs.Patrocinador;
 using IES300.API.Domain.Entities;
+using IES300.API.Domain.Entities.Jogo;
 using IES300.API.Domain.Interfaces.Repositories;
 using IES300.API.Domain.Interfaces.Services;
 using System;
@@ -147,6 +148,40 @@ namespace IES300.API.Services.Services
 
             if (retorno)
                 throw new ArgumentException($"Email: {email} já existe");
+        }
+
+        public DadosPatrocinador ObterPatrocinadorComFichaseTemaAleatorio()
+        {
+            var patrocinadorCompleto = _patrocinadorRepository.ObterTodosPatrocinadoresComFichasETemas();
+
+            var randomPatro = new Random(DateTime.Now.Millisecond);
+            var numRandomP = randomPatro.Next(0, patrocinadorCompleto.Count());
+
+            var patrocinadorEscolhido = patrocinadorCompleto[numRandomP];
+
+            var randomTema = new Random(DateTime.Now.Millisecond);
+            var numRandomT = randomTema.Next(0, patrocinadorEscolhido.Temas.Count());
+
+            var temaEscolhido = patrocinadorEscolhido.Temas.ToList()[numRandomT];
+
+            var randomFicha1 = new Random(DateTime.Now.Millisecond);
+            var numRandomF1 = randomFicha1.Next(0, patrocinadorEscolhido.Temas.Count());
+            var fichaEscolhida1 = temaEscolhido.Fichas.ToList()[numRandomF1];
+            temaEscolhido.Fichas.Remove(fichaEscolhida1);
+
+            var randomFicha2 = new Random(DateTime.Now.Millisecond);
+            var numRandomF2 = randomFicha2.Next(0, patrocinadorEscolhido.Temas.Count());
+
+            var fichaEscolhida2 = temaEscolhido.Fichas.ToList()[numRandomF2];
+
+            return new DadosPatrocinador()
+            {
+                Tabuleiro = temaEscolhido.UrlTabuleiro,
+                Banner = patrocinadorEscolhido.UrlLogo,
+                Ficha1 = fichaEscolhida1.UrlFicha,
+                Ficha2 = fichaEscolhida2.UrlFicha,
+                Url = patrocinadorEscolhido.Website
+            };
         }
     }
 }

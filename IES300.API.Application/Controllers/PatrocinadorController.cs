@@ -132,5 +132,12 @@ namespace IES300.API.Application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { message = ex.Message });
             }
         }
+
+        [HttpGet]
+        [Route("/testeAleatorio")]
+        public IActionResult TesteAleatorio()
+        {
+            return Ok(_patrocinadorService.ObterPatrocinadorComFichaseTemaAleatorio());
+        }
     }
 }
