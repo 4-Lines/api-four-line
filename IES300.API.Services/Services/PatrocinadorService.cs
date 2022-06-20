@@ -157,22 +157,22 @@ namespace IES300.API.Services.Services
             if (patrocinadorCompleto.Count() != 0)
             {
                 var randomPatro = new Random(DateTime.Now.Millisecond);
-                var numRandomP = randomPatro.Next(0, patrocinadorCompleto.Count());
+                var numRandomP = randomPatro.Next(0, (patrocinadorCompleto.Count()));
 
                 var patrocinadorEscolhido = patrocinadorCompleto[numRandomP];
 
                 var randomTema = new Random(DateTime.Now.Millisecond);
-                var numRandomT = randomTema.Next(0, patrocinadorEscolhido.Temas.Count());
+                var numRandomT = randomTema.Next(0, (patrocinadorEscolhido.Temas.Count()));
 
                 var temaEscolhido = patrocinadorEscolhido.Temas.ToList()[numRandomT];
 
                 var randomFicha1 = new Random(DateTime.Now.Millisecond);
-                var numRandomF1 = randomFicha1.Next(0, patrocinadorEscolhido.Temas.Count());
+                var numRandomF1 = randomFicha1.Next(0, (temaEscolhido.Fichas.Count()));
                 var fichaEscolhida1 = temaEscolhido.Fichas.ToList()[numRandomF1];
                 temaEscolhido.Fichas.Remove(fichaEscolhida1);
 
                 var randomFicha2 = new Random(DateTime.Now.Millisecond);
-                var numRandomF2 = randomFicha2.Next(0, patrocinadorEscolhido.Temas.Count());
+                var numRandomF2 = randomFicha2.Next(0, (temaEscolhido.Fichas.Count()));
 
                 var fichaEscolhida2 = temaEscolhido.Fichas.ToList()[numRandomF2];
 
