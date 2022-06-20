@@ -74,7 +74,7 @@ namespace IES300.API.Application.Hub
 
             if (sala != null)
             {
-                if(sala.Jogador1.IdJogador == connectionId)
+                if (sala.Jogador1.IdJogador == connectionId)
                     await Clients.Client(sala.Jogador1.IdJogador).SendAsync("obterDadosPartida", sala.Jogador1, sala.Jogador2, sala.DadosPatrocinador);
                 else
                     await Clients.Client(sala.Jogador2.IdJogador).SendAsync("obterDadosPartida", sala.Jogador1, sala.Jogador2, sala.DadosPatrocinador);
@@ -87,35 +87,38 @@ namespace IES300.API.Application.Hub
 
             if (sala != null)
             {
-                if(sala.Jogador1.IdJogador == connectionIdOld)
+                if (sala.Jogador1.IdJogador == connectionIdOld)
                     sala.Jogador1.IdJogador = connectionIdNew;
                 else
                     sala.Jogador2.IdJogador = connectionIdNew;
             }
         }
 
-        public async void DesconectarSala(string connectionId)
+        public async void DesconectarSala(string connectionId, string motivo) // motivo 1 - desistiu; motivo 2 - timer zero; motivo 3 - cancelo looby
         {
             var sala = _salaJogo.Find(x => x.Jogador1.IdJogador == connectionId || x.Jogador2.IdJogador == connectionId);
-            
-            if (sala.Jogador1 != null && sala.Jogador2 != null) // sala com duas pessoas
+            int motivoInt = Convert.ToInt32(motivo);
+
+            if (sala.Jogador1 != null && sala.Jogador2 != null && motivoInt != 3) // sala com duas pessoas
             {
                 if (sala.Jogador1.IdUsuario != 0 && sala.Jogador2.IdUsuario != 0)
                 {
                     if (sala.Jogador1.IdJogador == connectionId)
                     {
                         _usuarioService.ContabilizarResultadoPartida(sala.Jogador2.IdUsuario, sala.Jogador1.IdUsuario);
-                        await Clients.Client(sala.Jogador2.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+                        await Clients.Client(sala.Jogador2.IdJogador).SendAsync("adversarioDesistiu", motivo); // manda tbm pro ganhador do motivo de timer zerado
+                        await Clients.Client(sala.Jogador1.IdJogador).SendAsync("avisoPerdeu", motivo);
                     }
                     else
                     {
                         _usuarioService.ContabilizarResultadoPartida(sala.Jogador1.IdUsuario, sala.Jogador2.IdUsuario);
-                        await Clients.Client(sala.Jogador1.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+                        await Clients.Client(sala.Jogador1.IdJogador).SendAsync("adversarioDesistiu", motivo); // manda tbm pro ganhador do motivo de timer zerado
+                        await Clients.Client(sala.Jogador2.IdJogador).SendAsync("avisoPerdeu", motivo);
                     }
                 }
             }
 
-            if(sala != null)
+            if (sala != null)
                 _salaJogo.Remove(sala); // apaga a sala para evitar bug com validar sala == null
         }
 
@@ -126,7 +129,7 @@ namespace IES300.API.Application.Hub
             if (x != null && y != null)
             {
                 encerrada = VerificaVitoria(player, x, y, campos);
-                if(encerrada != 0)
+                if (encerrada != 0)
                 {
                     if (encerrada != 3)
                     {
