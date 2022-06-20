@@ -17,7 +17,8 @@ namespace IES300.API.Repository.Repositories
 
         public List<Patrocinador> ObterTodosPatrocinadoresComFichasETemas()
         {
-            return _dbSet.Where(x => x.Ativado == true && x.Temas.Count() > 0).Include(x => x.Temas.Where(x => x.Ativado == true && x.Fichas.Count() >= 2)).ThenInclude(x => x.Fichas.Where(x => x.Ativado == true)).ToList();
+            var query = _dbSet.Where(x => x.Ativado == true).Include(x => x.Temas.Where(x => x.Ativado == true)).ThenInclude(x => x.Fichas.Where(x => x.Ativado == true)).ToList();
+            return query.Where(x => (x.Temas.Count() > 0) && (x.Temas.Select(x => x.Fichas.Count >= 2)).Any()).ToList();
         }
     }
 }
