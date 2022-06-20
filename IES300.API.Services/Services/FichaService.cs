@@ -85,9 +85,9 @@ namespace IES300.API.Services.Services
         {
             var fichaOutput = this.ObterFichaPorId(fichaUpdate.Id);
 
-            var countFichasPorTema = _fichaRepository.ObterFichasPorIdTema(fichaOutput.IdTema).Count();
-            if (countFichasPorTema < 3 && fichaUpdate.IdTema != fichaOutput.IdTema)
-                throw new InvalidOperationException($"Impossível alterar ficha, seu Tema tem menos de 3 Peças");
+            //var countFichasPorTema = _fichaRepository.ObterFichasPorIdTema(fichaOutput.IdTema).Count();
+            //if (countFichasPorTema < 3 && fichaUpdate.IdTema != fichaOutput.IdTema)
+            //    throw new InvalidOperationException($"Impossível alterar ficha, seu Tema tem menos de 3 Peças");
 
             var ficha = new Ficha()
             {
@@ -116,10 +116,10 @@ namespace IES300.API.Services.Services
             if (id < 1)
                 throw new ArgumentException($"Id: {id} está inválido");
 
-            var ficha = this.ObterFichaPorId(id);
-            var countFichasPorTema = _fichaRepository.ObterFichasPorIdTema(ficha.IdTema).Count();
-            if (countFichasPorTema < 3)
-                throw new InvalidOperationException($"Impossível deletar ficha, seu Tema tem menos de 3 Peças");
+            //var ficha = this.ObterFichaPorId(id);
+            //var countFichasPorTema = _fichaRepository.ObterFichasPorIdTema(ficha.IdTema).Count();
+            //if (countFichasPorTema < 3)
+            //    throw new InvalidOperationException($"Impossível deletar ficha, seu Tema tem menos de 3 Peças");
 
             var retorno = _fichaRepository.Deletar(id);
 

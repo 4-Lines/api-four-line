@@ -47,7 +47,7 @@ namespace IES300.API.Application.Hub
             {
                 if (sala.Jogador1.IdJogador == "")
                     sala.Jogador1.IdJogador = connectionId;
-                else
+                else if (sala.Jogador1.IdUsuario != Convert.ToInt32(idUsuario))
                 {
                     sala.Jogador2.IdJogador = connectionId;
                     sala.Jogador2.NickName = name;
@@ -100,15 +100,18 @@ namespace IES300.API.Application.Hub
             
             if (sala.Jogador1 != null && sala.Jogador2 != null) // sala com duas pessoas
             {
-                if (sala.Jogador1.IdJogador == connectionId)
+                if (sala.Jogador1.IdUsuario != 0 && sala.Jogador2.IdUsuario != 0)
                 {
-                    _usuarioService.ContabilizarResultadoPartida(sala.Jogador2.IdUsuario, sala.Jogador1.IdUsuario);
-                    await Clients.Client(sala.Jogador2.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
-                } 
-                else
-                {
-                    _usuarioService.ContabilizarResultadoPartida(sala.Jogador1.IdUsuario, sala.Jogador2.IdUsuario);
-                    await Clients.Client(sala.Jogador1.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+                    if (sala.Jogador1.IdJogador == connectionId)
+                    {
+                        _usuarioService.ContabilizarResultadoPartida(sala.Jogador2.IdUsuario, sala.Jogador1.IdUsuario);
+                        await Clients.Client(sala.Jogador2.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+                    }
+                    else
+                    {
+                        _usuarioService.ContabilizarResultadoPartida(sala.Jogador1.IdUsuario, sala.Jogador2.IdUsuario);
+                        await Clients.Client(sala.Jogador1.IdJogador).SendAsync("adversarioDesistiu", "Você ganhou");
+                    }
                 }
             }
 
