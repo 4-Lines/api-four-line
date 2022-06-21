@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  ies300.api.application:
+    image: ${DOCKER_REGISTRY-}ies300apiapplication
+    build:
+      context: .
+      dockerfile: IES300.API.Application/Dockerfile

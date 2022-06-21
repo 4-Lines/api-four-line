@@ -22,5 +22,4 @@ RUN dotnet publish "IES300.API.Application.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-CMD ASPNETCORE_URLS="http://*:$PORT" dotnet IES300.API.Application.dll
+ENTRYPOINT ["dotnet", "IES300.API.Application.dll"]
